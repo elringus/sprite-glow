@@ -1,5 +1,7 @@
 # SpriteGlow
 
+The effect is achieved using sprite outline in HDR colors and standard Unity bloom image effect.
+
 ![Glow Intensity](https://i.gyazo.com/4805617c774595e3411bd8ffa5ed2cd0.gif) 
 ![Glow Color](https://i.gyazo.com/86f54e3c4955e97fa4303eec451dd678.gif)
 
