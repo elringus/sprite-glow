@@ -1,6 +1,4 @@
-﻿// Upgrade NOTE: replaced '_Object2World' with 'unity_ObjectToWorld'
-
-Shader "Sprites/Glow"
+﻿Shader "Sprites/Glow"
 {
 	Properties
 	{
@@ -8,7 +6,6 @@ Shader "Sprites/Glow"
 		_Color("Tint", Color) = (1,1,1,1)
 		[MaterialToggle] PixelSnap("Pixel snap", Float) = 0
 
-		// Add values to determine if outlining is enabled and outline color.
 		[PerRendererData] _Outline("Outline", Float) = 0
 		[HDR][PerRendererData] _OutlineColor("Outline Color", Color) = (1,1,1,1)
 		[PerRendererData] _OutlineSize("Outline Size", int) = 1
@@ -33,8 +30,8 @@ Shader "Sprites/Glow"
 		Pass
 		{
 			CGPROGRAM
-			#pragma vertex vert
-			#pragma fragment frag
+			#pragma vertex ComputeVertex
+			#pragma fragment ComputeFragment
 			#pragma multi_compile _ PIXELSNAP_ON
 			#pragma shader_feature ETC1_EXTERNAL_ALPHA
 			#include "UnityCG.cginc"
@@ -58,7 +55,7 @@ Shader "Sprites/Glow"
 			fixed4 _OutlineColor;
 			int _OutlineSize;
 
-			v2f vert(appdata_t IN)
+			v2f ComputeVertex (appdata_t IN)
 			{
 				v2f OUT;
 				OUT.vertex = mul(UNITY_MATRIX_MVP, IN.vertex);
@@ -87,7 +84,7 @@ Shader "Sprites/Glow"
 				return color;
 			}
 
-			fixed4 frag(v2f IN) : SV_Target
+			fixed4 ComputeFragment (v2f IN) : SV_Target
 			{
 				fixed4 c = SampleSpriteTexture(IN.texcoord) * IN.color;
 		
@@ -114,7 +111,6 @@ Shader "Sprites/Glow"
 					
 				}
 
-				//c.a *= 1 - distance(IN.texcoord, fixed2(0.5, 0.5));
 				c.rgb *= c.a;
 
 				return c;
