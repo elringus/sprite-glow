@@ -3,33 +3,65 @@
 [ExecuteInEditMode, RequireComponent(typeof(SpriteRenderer))]
 public class SpriteGlow : MonoBehaviour
 {
-    [ColorUsage(true, true, 0f, 8f, 0.125f, 3f)]
-    public Color GlowColor = Color.white;
+    public Color GlowColor
+    {
+        get { return _glowColor; }
+        set
+        {
+            if (_glowColor != value)
+            {
+                _glowColor = value;
+                SetMaterialProperties(enabled);
+            }
+        }
+    }
 
-    [Range(0, 160)]
-    public int OutlineWidth = 1;
+    public int OutlineWidth
+    {
+        get { return _outlineWidth; }
+        set
+        {
+            if (_outlineWidth != value)
+            {
+                _outlineWidth = value;
+                SetMaterialProperties(enabled);
+            }
+        }
+    }
 
+    [SerializeField, ColorUsage(true, true, 0f, 8f, 0.125f, 3f)]
+    private Color _glowColor = Color.white;
+    [SerializeField, Range(0, 160)]
+    private int _outlineWidth = 1;
+
+    [SerializeField, HideInInspector]
+    private static Material spriteOutlineMaterial;
     private SpriteRenderer spriteRenderer;
     private MaterialPropertyBlock materialProperties;
 
     private void OnEnable ()
     {
+        if (!spriteOutlineMaterial) spriteOutlineMaterial = new Material(Shader.Find("Sprites/Outline"));
         spriteRenderer = GetComponent<SpriteRenderer>();
+        spriteRenderer.sharedMaterial = spriteOutlineMaterial;
         materialProperties = new MaterialPropertyBlock();
-        UpdateOutline(true);
+        SetMaterialProperties(true);
     }
 
     private void OnDisable ()
     {
-        UpdateOutline(false);
+        SetMaterialProperties(false);
     }
 
+    #if UNITY_EDITOR
     private void Update ()
     {
-        UpdateOutline(true);
+        // Used to control material properties via editor GUI.
+        SetMaterialProperties(true);
     }
+    #endif
 
-    private void UpdateOutline (bool isOutlineEnabled)
+    private void SetMaterialProperties (bool isOutlineEnabled)
     {
         spriteRenderer.GetPropertyBlock(materialProperties);
         materialProperties.SetFloat("_IsOutlineEnabled", isOutlineEnabled ? 1f : 0f);
