@@ -37,7 +37,7 @@ public class SpriteGlow : MonoBehaviour
     private Color _glowColor = Color.white * 8;
 
     [Tooltip("Width of the outline, in texels.")]
-    [SerializeField, Range(0, 160)]
+    [SerializeField, Range(0, 10)]
     private int _outlineWidth = 1;
 
     private static Material sharedOutlineMaterial;
