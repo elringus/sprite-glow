@@ -9,7 +9,7 @@ Shader "Sprites/Outline"
         _Color("Tint", Color) = (1,1,1,1)
         [MaterialToggle] PixelSnap("Pixel snap", Float) = 0
 
-        [Toggle][PerRendererData] _IsOutlineEnabled("Enable Outline", Float) = 0
+        [Toggle][PerRendererData] _IsOutlineEnabled("Enable Outline", int) = 0
         [HDR][PerRendererData] _OutlineColor("Outline Color", Color) = (1,1,1,1)
         [PerRendererData] _OutlineSize("Outline Size", int) = 1
     }
@@ -42,7 +42,7 @@ Shader "Sprites/Outline"
 
             fixed4 _Color;
             fixed4 _OutlineColor;
-            float _IsOutlineEnabled;
+            int _IsOutlineEnabled;
             int _OutlineSize;
             sampler2D _MainTex;
             float4 _MainTex_TexelSize;
