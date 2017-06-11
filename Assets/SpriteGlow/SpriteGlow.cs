@@ -32,7 +32,7 @@ public class SpriteGlow : MonoBehaviour
     [Tooltip("Custom material to draw an outline for the sprite.\nIf not provided, will use a default shared one.")]
     public Material CustomOutlineMaterial;
 
-    [Tooltip("Color of the outline. Make sure to set 'Custom Brightness' > 1 to enable HDR.")]
+    [Tooltip("Color of the outline. Make sure to set 'Current Brightness' > 1 to enable HDR.")]
     [SerializeField, ColorUsage(true, true, 0f, 8f, 0.125f, 3f)]
     private Color _glowColor = Color.white;
 
