@@ -29,21 +29,27 @@ public class SpriteGlow : MonoBehaviour
         }
     }
 
+    [Tooltip("Custom material to draw an outline for the sprite.\nIf not provided, will use a default shared one.")]
+    public Material CustomOutlineMaterial;
+
+    [Tooltip("Color of the outline. Make sure to set 'Custom Brightness' > 1 to enable HDR.")]
     [SerializeField, ColorUsage(true, true, 0f, 8f, 0.125f, 3f)]
     private Color _glowColor = Color.white;
+
+    [Tooltip("Width of the outline, in texels.")]
     [SerializeField, Range(0, 160)]
     private int _outlineWidth = 1;
 
-    [SerializeField, HideInInspector]
-    private static Material spriteOutlineMaterial;
+    private static Material sharedOutlineMaterial;
     private SpriteRenderer spriteRenderer;
     private MaterialPropertyBlock materialProperties;
 
     private void OnEnable ()
     {
-        if (!spriteOutlineMaterial) spriteOutlineMaterial = new Material(Shader.Find("Sprites/Outline"));
+        if (!sharedOutlineMaterial) sharedOutlineMaterial = new Material(Shader.Find("Sprites/Outline"));
         spriteRenderer = GetComponent<SpriteRenderer>();
-        spriteRenderer.sharedMaterial = spriteOutlineMaterial;
+        if (CustomOutlineMaterial) spriteRenderer.material = CustomOutlineMaterial;
+        else spriteRenderer.sharedMaterial = sharedOutlineMaterial;
         materialProperties = new MaterialPropertyBlock();
         SetMaterialProperties(true);
     }
@@ -64,7 +70,7 @@ public class SpriteGlow : MonoBehaviour
     private void SetMaterialProperties (bool isOutlineEnabled)
     {
         spriteRenderer.GetPropertyBlock(materialProperties);
-        materialProperties.SetFloat("_IsOutlineEnabled", isOutlineEnabled ? 1f : 0f);
+        materialProperties.SetFloat("_IsOutlineEnabled", isOutlineEnabled ? 1 : 0);
         materialProperties.SetColor("_OutlineColor", GlowColor);
         materialProperties.SetFloat("_OutlineSize", OutlineWidth);
         spriteRenderer.SetPropertyBlock(materialProperties);
