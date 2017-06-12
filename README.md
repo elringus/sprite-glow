@@ -1,12 +1,12 @@
 # SpriteGlow
 
-The effect is achieved using sprite outline in HDR colors and standard Unity bloom image effect.
+[SpriteGlow.unitypackage](https://github.com/Elringus/SpriteGlow/raw/master/SpriteGlow.unitypackage)
 
-![Glow Intensity](https://i.gyazo.com/4805617c774595e3411bd8ffa5ed2cd0.gif) 
-![Glow Color](https://i.gyazo.com/86f54e3c4955e97fa4303eec451dd678.gif)
+The effect is achieved using sprite outline in HDR colors (applied via shader) and bloom post-processing.
 
-Character sprite by Mikhail Pigichka
-https://www.facebook.com/hundewache
+![Glow Intensity](https://i.gyazo.com/698f7d444d334b41657f056fb1ac94c7.gif) 
+![Glow Color](https://i.gyazo.com/c8f8ec8a276aa4781b52732c521691db.gif)
 
-Sprite outline effect by Ryan Nielson
-http://nielson.io/2016/04/2d-sprite-outlines-in-unity/
+For the bloom effect [Unity Post Processing Stack](http://u3d.as/KTp) is used. You can replace it with similar 3rd-party effects.
+
+Character sprite by [Mikhail Pigichka](https://www.facebook.com/hundewache).
