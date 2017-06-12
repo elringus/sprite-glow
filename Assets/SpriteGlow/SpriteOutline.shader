@@ -1,5 +1,4 @@
 ﻿// Draws an HDR outline over the sprite borders.
-// Can be used in conjuction with a bloom image effect to create sprite glow effect.
 
 Shader "Sprites/Outline"
 {
@@ -113,7 +112,7 @@ Shader "Sprites/Outline"
                 color *= color.a;
 
                 int shouldDrawOutline = ShouldDrawOutline(color, vertexOutput.TexCoord);
-                color = lerp(color, _OutlineColor, shouldDrawOutline);
+                color = lerp(color, _OutlineColor * _OutlineColor.a, shouldDrawOutline);
 
                 return color;
             }
