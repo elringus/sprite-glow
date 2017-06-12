@@ -1,5 +1,10 @@
 ﻿using UnityEngine;
 
+/// <summary>
+/// Adds an HDR outline over the sprite borders.
+/// Can be used in conjuction with a bloom post-processing to create a glow effect.
+/// </summary>
+[AddComponentMenu("Effects/Sprite Glow")]
 [ExecuteInEditMode, RequireComponent(typeof(SpriteRenderer))]
 public class SpriteGlow : MonoBehaviour
 {
@@ -34,7 +39,7 @@ public class SpriteGlow : MonoBehaviour
 
     [Tooltip("Color of the outline. Make sure to set 'Current Brightness' > 1 to enable HDR.")]
     [SerializeField, ColorUsage(true, true, 1f, 10f, 0.125f, 3f)]
-    private Color _glowColor = Color.white * 8;
+    private Color _glowColor = Color.white * 2f;
 
     [Tooltip("Width of the outline, in texels.")]
     [SerializeField, Range(0, 10)]

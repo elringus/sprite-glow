@@ -1,6 +1,6 @@
 fileFormatVersion: 2
-guid: b6d92bc6463700f4b8fee3bd11d4c206
-timeCreated: 1497121839
+guid: d57fadba8e0d4484185da8cf5a991719
+timeCreated: 1497298860
 licenseType: Pro
 TextureImporter:
   fileIDToRecycleName: {}
@@ -24,11 +24,11 @@ TextureImporter:
   generateCubemap: 6
   cubemapConvolution: 0
   seamlessCubemap: 0
-  textureFormat: -1
+  textureFormat: 1
   maxTextureSize: 2048
   textureSettings:
     filterMode: 0
-    aniso: 1
+    aniso: -1
     mipBias: -1
     wrapMode: 1
   nPOTScale: 0
@@ -51,7 +51,7 @@ TextureImporter:
   textureFormatSet: 0
   platformSettings:
   - buildTarget: DefaultTexturePlatform
-    maxTextureSize: 512
+    maxTextureSize: 2048
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
@@ -59,7 +59,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
   - buildTarget: Standalone
-    maxTextureSize: 512
+    maxTextureSize: 2048
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
@@ -67,7 +67,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
   - buildTarget: iPhone
-    maxTextureSize: 512
+    maxTextureSize: 2048
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
@@ -75,7 +75,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
   - buildTarget: Android
-    maxTextureSize: 512
+    maxTextureSize: 2048
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
@@ -83,7 +83,7 @@ TextureImporter:
     allowsAlphaSplitting: 0
     overridden: 0
   - buildTarget: WebGL
-    maxTextureSize: 512
+    maxTextureSize: 2048
     textureFormat: -1
     textureCompression: 0
     compressionQuality: 50
@@ -93,27 +93,7 @@ TextureImporter:
   spriteSheet:
     serializedVersion: 2
     sprites: []
-    outline:
-    - - {x: 71.5, y: -122}
-      - {x: 103.5, y: -98}
-      - {x: 103.5, y: 48}
-      - {x: 83.5, y: 75}
-      - {x: 66.5, y: 113}
-      - {x: 57.5, y: 153}
-      - {x: 45.5, y: 171}
-      - {x: -50.5, y: 171}
-      - {x: -60.5, y: 154}
-      - {x: -59.5, y: 124}
-      - {x: -84.5, y: 83}
-      - {x: -103.5, y: 51}
-      - {x: -103.5, y: -75}
-      - {x: -98.5, y: -96}
-      - {x: -65.5, y: -142}
-      - {x: -51.5, y: -171}
-      - {x: -22.5, y: -171}
-      - {x: -0.6578903, y: -116.73685}
-      - {x: 12.5, y: -171}
-      - {x: 56.5, y: -171}
+    outline: []
   spritePackingTag: 
   userData: 
   assetBundleName: 
