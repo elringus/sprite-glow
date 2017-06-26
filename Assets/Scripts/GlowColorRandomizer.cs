@@ -1,20 +1,23 @@
 ﻿using UnityEngine;
 
-/// <summary>
-/// Used to break batching when testing performance.
-/// </summary>
 [RequireComponent(typeof(SpriteGlow))]
 public class GlowColorRandomizer : MonoBehaviour
 {
-    private SpriteGlow spriteRenderer;
+    private SpriteGlow spriteGlow;
 
     private void Awake ()
     {
-        spriteRenderer = GetComponent<SpriteGlow>();
+        spriteGlow = GetComponent<SpriteGlow>();
     }
 
-    private void Start ()
+    private void OnEnable ()
     {
-        spriteRenderer.GlowColor = Random.ColorHSV();
+        spriteGlow.enabled = true;
+        spriteGlow.GlowColor = Random.ColorHSV();
+    }
+
+    private void OnDisable ()
+    {
+        spriteGlow.enabled = false;
     }
 }
