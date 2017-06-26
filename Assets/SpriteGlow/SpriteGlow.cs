@@ -117,6 +117,7 @@ public class SpriteGlow : MonoBehaviour
 
         if (CustomOutlineMaterial)
         {
+            spriteRenderer.material = CustomOutlineMaterial;
             if (DrawOutside && !CustomOutlineMaterial.IsKeywordEnabled(OUTSIDE_MATERIAL_KEYWORD))
                 CustomOutlineMaterial.EnableKeyword(OUTSIDE_MATERIAL_KEYWORD);
             else if (!DrawOutside && CustomOutlineMaterial.IsKeywordEnabled(OUTSIDE_MATERIAL_KEYWORD))
