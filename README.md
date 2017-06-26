@@ -1,6 +1,6 @@
 # SpriteGlow
 
-[SpriteGlow.unitypackage](https://github.com/Elringus/SpriteGlow/raw/master/SpriteGlow.unitypackage)
+[SpriteGlow.unitypackage](https://github.com/Elringus/SpriteGlow/releases/download/v2.1-release/SpriteGlow.unitypackage)
 
 The effect is achieved using sprite outline in HDR colors (applied via shader) and bloom post-processing.
 
