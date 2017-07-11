@@ -1,12 +1,23 @@
-namespace UnityEngine.PostProcessing
-{
-    public sealed class TrackballAttribute : PropertyAttribute
-    {
-        public readonly string method;
+using System;
 
-        public TrackballAttribute(string method)
+namespace UnityEngine.Rendering.PostProcessing
+{
+    [AttributeUsage(AttributeTargets.Field, AllowMultiple = false)]
+    public sealed class TrackballAttribute : Attribute
+    {
+        public enum Mode
         {
-            this.method = method;
+            None,
+            Lift,
+            Gamma,
+            Gain
+        }
+
+        public readonly Mode mode;
+
+        public TrackballAttribute(Mode mode)
+        {
+            this.mode = mode;
         }
     }
 }
