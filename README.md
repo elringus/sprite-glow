@@ -9,4 +9,6 @@ The effect is achieved using sprite outline in HDR colors (applied via shader) a
 
 For the bloom effect [Unity Post Processing Stack](https://github.com/Unity-Technologies/PostProcessing) is used. You can replace it with similar 3rd-party solutions.
 
+Master branch aims to be on par with the latest Unity version. See [releases](https://github.com/Elringus/SpriteGlow/releases) for previous versions support.
+
 Character sprite by [Mikhail Pigichka](https://www.facebook.com/hundewache).
