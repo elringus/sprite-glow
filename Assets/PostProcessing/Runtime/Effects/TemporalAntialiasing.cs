@@ -30,8 +30,7 @@ namespace UnityEngine.Rendering.PostProcessing
         enum Pass
         {
             SolverDilate,
-            SolverNoDilate,
-            AlphaClear
+            SolverNoDilate
         }
 
         readonly RenderTargetIdentifier[] m_Mrt = new RenderTargetIdentifier[2];
@@ -49,6 +48,7 @@ namespace UnityEngine.Rendering.PostProcessing
         {
             return SystemInfo.supportedRenderTargetCount >= 2
                 && SystemInfo.supportsMotionVectors
+                && SystemInfo.graphicsDeviceType != GraphicsDeviceType.OpenGLES2
                 && !RuntimeUtilities.isSinglePassStereoEnabled;
         }
 
@@ -75,87 +75,28 @@ namespace UnityEngine.Rendering.PostProcessing
             return offset;
         }
 
-        // Adapted heavily from PlayDead's TAA code
-        // https://github.com/playdeadgames/temporal/blob/master/Assets/Scripts/Extensions.cs
-        Matrix4x4 GetPerspectiveProjectionMatrix(Camera camera, Vector2 offset)
+        public Matrix4x4 GetJitteredProjectionMatrix(Camera camera)
         {
-            float vertical = Mathf.Tan(0.5f * Mathf.Deg2Rad * camera.fieldOfView);
-            float horizontal = vertical * camera.aspect;
-            float near = camera.nearClipPlane;
-            float far = camera.farClipPlane;
-
-            offset.x *= horizontal / (0.5f * camera.pixelWidth);
-            offset.y *= vertical / (0.5f * camera.pixelHeight);
-
-            float left = (offset.x - horizontal) * near;
-            float right = (offset.x + horizontal) * near;
-            float top = (offset.y + vertical) * near;
-            float bottom = (offset.y - vertical) * near;
-
-            var matrix = new Matrix4x4();
-
-            matrix[0, 0] = (2f * near) / (right - left);
-            matrix[0, 1] = 0f;
-            matrix[0, 2] = (right + left) / (right - left);
-            matrix[0, 3] = 0f;
-
-            matrix[1, 0] = 0f;
-            matrix[1, 1] = (2f * near) / (top - bottom);
-            matrix[1, 2] = (top + bottom) / (top - bottom);
-            matrix[1, 3] = 0f;
-
-            matrix[2, 0] = 0f;
-            matrix[2, 1] = 0f;
-            matrix[2, 2] = -(far + near) / (far - near);
-            matrix[2, 3] = -(2f * far * near) / (far - near);
-
-            matrix[3, 0] = 0f;
-            matrix[3, 1] = 0f;
-            matrix[3, 2] = -1f;
-            matrix[3, 3] = 0f;
-
-            return matrix;
-        }
-
-        Matrix4x4 GetOrthographicProjectionMatrix(Camera camera, Vector2 offset)
-        {
-            float vertical = camera.orthographicSize;
-            float horizontal = vertical * camera.aspect;
-
-            offset.x *= horizontal / (0.5f * camera.pixelWidth);
-            offset.y *= vertical / (0.5f * camera.pixelHeight);
-
-            float left = offset.x - horizontal;
-            float right = offset.x + horizontal;
-            float top = offset.y + vertical;
-            float bottom = offset.y - vertical;
-
-            return Matrix4x4.Ortho(left, right, bottom, top, camera.nearClipPlane, camera.farClipPlane);
-        }
-
-        public void SetProjectionMatrix(Camera camera)
-        {
+            Matrix4x4 cameraProj;
             jitter = GenerateRandomOffset();
             jitter *= jitterSpread;
 
-            camera.nonJitteredProjectionMatrix = camera.projectionMatrix;
-
             if (jitteredMatrixFunc != null)
             {
-                camera.projectionMatrix = jitteredMatrixFunc(camera, jitter);
+                cameraProj = jitteredMatrixFunc(camera, jitter);
             }
             else
             {
-                camera.projectionMatrix = camera.orthographic
-                    ? GetOrthographicProjectionMatrix(camera, jitter)
-                    : GetPerspectiveProjectionMatrix(camera, jitter);
+                cameraProj = camera.orthographic
+                    ? RuntimeUtilities.GetJitteredOrthographicProjectionMatrix(camera, jitter)
+                    : RuntimeUtilities.GetJitteredPerspectiveProjectionMatrix(camera, jitter);
             }
 
-            camera.useJitteredProjectionMatrixForTransparentRendering = false;
             jitter = new Vector2(jitter.x / camera.pixelWidth, jitter.y / camera.pixelHeight);
+            return cameraProj;
         }
 
-        RenderTexture CheckHistory(int id, PostProcessRenderContext context, PropertySheet sheet)
+        RenderTexture CheckHistory(int id, PostProcessRenderContext context)
         {
             var rt = m_HistoryTextures[id];
 
@@ -168,7 +109,7 @@ namespace UnityEngine.Rendering.PostProcessing
                 rt.filterMode = FilterMode.Bilinear;
                 m_HistoryTextures[id] = rt;
 
-                context.command.BlitFullscreenTriangle(context.source, rt, sheet, (int)Pass.AlphaClear);
+                context.command.BlitFullscreenTriangle(context.source, rt);
             }
             else if (rt.width != context.width || rt.height != context.height)
             {
@@ -194,8 +135,8 @@ namespace UnityEngine.Rendering.PostProcessing
             cmd.BeginSample("TemporalAntialiasing");
 
             int pp = m_HistoryPingPong;
-            var historyRead = CheckHistory(++pp % 2, context, sheet);
-            var historyWrite = CheckHistory(++pp % 2, context, sheet);
+            var historyRead = CheckHistory(++pp % 2, context);
+            var historyWrite = CheckHistory(++pp % 2, context);
             m_HistoryPingPong = ++pp % 2;
 
             const float kMotionAmplification = 100f * 60f;

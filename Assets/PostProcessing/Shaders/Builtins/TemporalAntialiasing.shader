@@ -1,12 +1,18 @@
 Shader "Hidden/PostProcessing/TemporalAntialiasing"
 {
     HLSLINCLUDE
-        
+
         #pragma exclude_renderers gles
         #include "../StdLib.hlsl"
         #include "../Colors.hlsl"
 
-        TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
+    #if UNITY_VERSION >= 201710
+        #define _MainTexSampler sampler_LinearClamp
+    #else
+        #define _MainTexSampler sampler_MainTex
+    #endif
+
+        TEXTURE2D_SAMPLER2D(_MainTex, _MainTexSampler);
         float4 _MainTex_TexelSize;
 
         TEXTURE2D_SAMPLER2D(_HistoryTex, sampler_HistoryTex);
@@ -45,34 +51,19 @@ Shader "Hidden/PostProcessing/TemporalAntialiasing"
             return (uv + result.xy * k);
         }
 
-        // Adapted from Playdead's TAA implementation
-        // https://github.com/playdeadgames/temporal
-        float4 ClipToAABB(float4 color, float4 p, float3 minimum, float3 maximum)
+        float4 ClipToAABB(float4 color, float3 minimum, float3 maximum)
         {
-            float4 r = color - p;
+            // Note: only clips towards aabb center (but fast!)
+            float3 center = 0.5 * (maximum + minimum);
+            float3 extents = 0.5 * (maximum - minimum);
 
-            maximum = maximum - p.xyz;
-            minimum = minimum - p.xyz;
+            // This is actually `distance`, however the keyword is reserved
+            float3 offset = color.rgb - center;
 
-            if (r.x > maximum.x + 0.00000001)
-                r *= (maximum.x / r.x);
-
-            if (r.y > maximum.y + 0.00000001)
-                r *= (maximum.y / r.y);
-
-            if (r.z > maximum.z + 0.00000001)
-                r *= (maximum.z / r.z);
-
-            if (r.x < minimum.x - 0.00000001)
-                r *= (minimum.x / r.x);
-
-            if (r.y < minimum.y - 0.00000001)
-                r *= (minimum.y / r.y);
-
-            if (r.z < minimum.z - 0.00000001)
-                r *= (minimum.z / r.z);
-
-            return p + r;
+            float3 ts = abs(extents / (offset + 0.0001));
+            float t = saturate(Min3(ts.x, ts.y, ts.z));
+            color.rgb = center + offset * t;
+            return color;
         }
 
         struct OutputSolver
@@ -86,10 +77,10 @@ Shader "Hidden/PostProcessing/TemporalAntialiasing"
             const float2 k = _MainTex_TexelSize.xy;
             float2 uv = texcoord - _Jitter;
 
-            float4 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv);
+            float4 color = SAMPLE_TEXTURE2D(_MainTex, _MainTexSampler, uv);
 
-            float4 topLeft = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv - k * 0.5);
-            float4 bottomRight = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, uv + k * 0.5);
+            float4 topLeft = SAMPLE_TEXTURE2D(_MainTex, _MainTexSampler, uv - k * 0.5);
+            float4 bottomRight = SAMPLE_TEXTURE2D(_MainTex, _MainTexSampler, uv + k * 0.5);
 
             float4 corners = 4.0 * (topLeft + bottomRight) - 2.0 * color;
 
@@ -118,7 +109,7 @@ Shader "Hidden/PostProcessing/TemporalAntialiasing"
             history = FastTonemap(history);
 
             // Clip history samples
-            history = ClipToAABB(history, clamp(color, minimum, maximum), minimum.xyz, maximum.xyz);
+            history = ClipToAABB(history, minimum.xyz, maximum.xyz);
 
             // Blend method
             float weight = clamp(
@@ -148,12 +139,6 @@ Shader "Hidden/PostProcessing/TemporalAntialiasing"
             return Solve(motion, i.texcoord);
         }
 
-        float4 FragAlphaClear(VaryingsDefault i) : SV_Target
-        {
-            float3 color = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.texcoord).rgb;
-            return float4(color, 0.0);
-        }
-
     ENDHLSL
 
     SubShader
@@ -178,17 +163,6 @@ Shader "Hidden/PostProcessing/TemporalAntialiasing"
 
                 #pragma vertex VertDefault
                 #pragma fragment FragSolverNoDilate
-
-            ENDHLSL
-        }
-
-        // 2: Alpha clear
-        Pass
-        {
-            HLSLPROGRAM
-
-                #pragma vertex VertDefault
-                #pragma fragment FragAlphaClear
 
             ENDHLSL
         }

@@ -28,15 +28,10 @@ namespace UnityEngine.Rendering.PostProcessing
 
         [DisplayName("Max Blur Size"), Tooltip("Convolution kernel size of the bokeh filter, which determines the maximum radius of bokeh. It also affects performances (the larger the kernel is, the longer the GPU time is required).")]
         public KernelSizeParameter kernelSize = new KernelSizeParameter { value = KernelSize.Medium };
-
-        public override bool IsEnabledAndSupported(PostProcessRenderContext context)
-        {
-            return enabled.value
-                && SystemInfo.SupportsRenderTextureFormat(RenderTextureFormat.ARGBHalf);
-        }
     }
     
     // TODO: Look into minimum blur amount in the distance, right now it's lerped until a point
+    // TODO: Doesn't play nice with alpha propagation, see if it can be fixed without killing performances
     public sealed class DepthOfFieldRenderer : PostProcessEffectRenderer<DepthOfField>
     {
         enum Pass
@@ -108,11 +103,11 @@ namespace UnityEngine.Rendering.PostProcessing
 
         public override void Render(PostProcessRenderContext context)
         {
-            var colorFormat = RenderTextureFormat.ARGBHalf;
+            var colorFormat = RenderTextureFormat.DefaultHDR;
             var cocFormat = SelectFormat(RenderTextureFormat.R8, RenderTextureFormat.RHalf);
 
             // Avoid using R8 on OSX with Metal. #896121, https://goo.gl/MgKqu6
-            #if UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX
+            #if (UNITY_EDITOR_OSX || UNITY_STANDALONE_OSX) && !UNITY_2017_1_OR_NEWER
             if (SystemInfo.graphicsDeviceType == UnityEngine.Rendering.GraphicsDeviceType.Metal)
                 cocFormat = SelectFormat(RenderTextureFormat.RHalf, RenderTextureFormat.Default);
             #endif
