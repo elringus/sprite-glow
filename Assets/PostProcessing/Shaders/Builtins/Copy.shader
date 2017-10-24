@@ -4,20 +4,6 @@ Shader "Hidden/PostProcessing/Copy"
 
         #include "../StdLib.hlsl"
 
-        struct AttributesClassic
-        {
-            float4 vertex : POSITION;
-            float2 texcoord : TEXCOORD0;
-        };
-
-        VaryingsDefault VertClassic(AttributesClassic v)
-        {
-            VaryingsDefault o;
-            o.vertex = mul(unity_MatrixVP, mul(unity_ObjectToWorld, float4(v.vertex.xyz, 1.0)));
-            o.texcoord = v.texcoord;
-            return o;
-        }
-
         TEXTURE2D_SAMPLER2D(_MainTex, sampler_MainTex);
 
         float4 Frag(VaryingsDefault i) : SV_Target
@@ -63,28 +49,6 @@ Shader "Hidden/PostProcessing/Copy"
             HLSLPROGRAM
 
                 #pragma vertex VertDefault
-                #pragma fragment FragKillNaN
-
-            ENDHLSL
-        }
-
-        // 2 - Classic copy
-        Pass
-        {
-            HLSLPROGRAM
-
-                #pragma vertex VertClassic
-                #pragma fragment Frag
-
-            ENDHLSL
-        }
-
-        // 3 - Classic copy + NaN killer
-        Pass
-        {
-            HLSLPROGRAM
-
-                #pragma vertex VertClassic
                 #pragma fragment FragKillNaN
 
             ENDHLSL

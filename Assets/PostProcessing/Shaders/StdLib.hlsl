@@ -235,6 +235,7 @@ struct VaryingsDefault
 {
     float4 vertex : SV_POSITION;
     float2 texcoord : TEXCOORD0;
+    float2 texcoordStereo : TEXCOORD1;
 };
 
 VaryingsDefault VertDefault(AttributesDefault v)
@@ -247,6 +248,8 @@ VaryingsDefault VertDefault(AttributesDefault v)
     o.texcoord = o.texcoord * float2(1.0, -1.0) + float2(0.0, 1.0);
 #endif
 
+    o.texcoordStereo = TransformStereoScreenSpaceTex(o.texcoord, 1.0);
+
     return o;
 }
 
@@ -255,7 +258,10 @@ VaryingsDefault VertDefaultNoFlip(AttributesDefault v)
     VaryingsDefault o;
     o.vertex = float4(v.vertex.xy, 0.0, 1.0);
     o.texcoord = TransformTriangleVertexToUV(v.vertex.xy);
+    o.texcoordStereo = TransformStereoScreenSpaceTex(o.texcoord, 1.0);
     return o;
 }
+
+#define TRANSFORM_TEX(tex,name) (tex.xy * name##_ST.xy + name##_ST.zw)
 
 #endif // UNITY_POSTFX_STDLIB

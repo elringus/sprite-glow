@@ -11,7 +11,7 @@ namespace UnityEditor.Rendering.PostProcessing
     using SerializedBundleRef = PostProcessLayer.SerializedBundleRef;
     using EXRFlags = Texture2D.EXRFlags;
 
-    [CustomEditor(typeof(PostProcessLayer))]
+    [CanEditMultipleObjects, CustomEditor(typeof(PostProcessLayer))]
     public sealed class PostProcessLayerEditor : BaseEditor<PostProcessLayer>
     {
         SerializedProperty m_StopNaNPropagation;
@@ -20,22 +20,15 @@ namespace UnityEditor.Rendering.PostProcessing
 
         SerializedProperty m_AntialiasingMode;
         SerializedProperty m_TaaJitterSpread;
-        SerializedProperty m_TaaSharpen;
+        SerializedProperty m_TaaSharpness;
         SerializedProperty m_TaaStationaryBlending;
         SerializedProperty m_TaaMotionBlending;
         SerializedProperty m_FxaaMobileOptimized;
         SerializedProperty m_FxaaKeepAlpha;
 
-        SerializedProperty m_AOEnabled;
-        SerializedProperty m_AOIntensity;
-        SerializedProperty m_AORadius;
-        SerializedProperty m_AOQuality;
-        SerializedProperty m_AOAmbientOnly;
-
         SerializedProperty m_FogEnabled;
         SerializedProperty m_FogExcludeSkybox;
 
-        SerializedProperty m_ShowRenderingFeatures;
         SerializedProperty m_ShowToolkit;
         SerializedProperty m_ShowCustomSorter;
 
@@ -65,22 +58,15 @@ namespace UnityEditor.Rendering.PostProcessing
 
             m_AntialiasingMode = FindProperty(x => x.antialiasingMode);
             m_TaaJitterSpread = FindProperty(x => x.temporalAntialiasing.jitterSpread);
-            m_TaaSharpen = FindProperty(x => x.temporalAntialiasing.sharpen);
+            m_TaaSharpness = FindProperty(x => x.temporalAntialiasing.sharpness);
             m_TaaStationaryBlending = FindProperty(x => x.temporalAntialiasing.stationaryBlending);
             m_TaaMotionBlending = FindProperty(x => x.temporalAntialiasing.motionBlending);
             m_FxaaMobileOptimized = FindProperty(x => x.fastApproximateAntialiasing.mobileOptimized);
             m_FxaaKeepAlpha = FindProperty(x => x.fastApproximateAntialiasing.keepAlpha);
 
-            m_AOEnabled = FindProperty(x => x.ambientOcclusion.enabled);
-            m_AOIntensity = FindProperty(x => x.ambientOcclusion.intensity);
-            m_AORadius = FindProperty(x => x.ambientOcclusion.radius);
-            m_AOQuality = FindProperty(x => x.ambientOcclusion.quality);
-            m_AOAmbientOnly = FindProperty(x => x.ambientOcclusion.ambientOnly);
-
             m_FogEnabled = FindProperty(x => x.fog.enabled);
             m_FogExcludeSkybox = FindProperty(x => x.fog.excludeSkybox);
 
-            m_ShowRenderingFeatures = serializedObject.FindProperty("m_ShowRenderingFeatures");
             m_ShowToolkit = serializedObject.FindProperty("m_ShowToolkit");
             m_ShowCustomSorter = serializedObject.FindProperty("m_ShowCustomSorter");
 
@@ -132,11 +118,11 @@ namespace UnityEditor.Rendering.PostProcessing
 
             DoVolumeBlending();
             DoAntialiasing();
+            DoFog(camera);
 
             EditorGUILayout.PropertyField(m_StopNaNPropagation, EditorUtilities.GetContent("Stop NaN Propagation|Automatically replaces NaN/Inf in shaders by a black pixel to avoid breaking some effects. This will slightly affect performances and should only be used if you experience NaN issues that you can't fix. Has no effect on GLES2 platforms."));
             EditorGUILayout.Space();
 
-            DoRenderingFeatures(camera);
             DoToolkit();
             DoCustomEffectSorter();
 
@@ -190,12 +176,12 @@ namespace UnityEditor.Rendering.PostProcessing
                 if (m_AntialiasingMode.intValue == (int)PostProcessLayer.Antialiasing.TemporalAntialiasing)
                 {
                     if (RuntimeUtilities.isSinglePassStereoEnabled)
-                        EditorGUILayout.HelpBox("TAA doesn't work with Single-pass stereo rendering.", MessageType.Warning);
+                        EditorGUILayout.HelpBox("TAA requires Unity 2017.3+ for Single-pass stereo rendering support.", MessageType.Warning);
 
                     EditorGUILayout.PropertyField(m_TaaJitterSpread);
                     EditorGUILayout.PropertyField(m_TaaStationaryBlending);
                     EditorGUILayout.PropertyField(m_TaaMotionBlending);
-                    EditorGUILayout.PropertyField(m_TaaSharpen);
+                    EditorGUILayout.PropertyField(m_TaaSharpness);
                 }
                 else if (m_AntialiasingMode.intValue == (int)PostProcessLayer.Antialiasing.SubpixelMorphologicalAntialiasing)
                 {
@@ -206,45 +192,6 @@ namespace UnityEditor.Rendering.PostProcessing
                 {
                     EditorGUILayout.PropertyField(m_FxaaMobileOptimized);
                     EditorGUILayout.PropertyField(m_FxaaKeepAlpha);
-                }
-            }
-            EditorGUI.indentLevel--;
-
-            EditorGUILayout.Space();
-        }
-
-        void DoRenderingFeatures(Camera camera)
-        {
-            if (RuntimeUtilities.scriptableRenderPipelineActive)
-                return;
-
-            EditorUtilities.DrawSplitter();
-            m_ShowRenderingFeatures.boolValue = EditorUtilities.DrawHeader("Rendering Features", m_ShowRenderingFeatures.boolValue);
-
-            if (m_ShowRenderingFeatures.boolValue)
-            {
-                GUILayout.Space(2);
-
-                DoAmbientOcclusion(camera);
-                DoFog(camera);
-            }
-        }
-
-        void DoAmbientOcclusion(Camera camera)
-        {
-            EditorGUILayout.LabelField(EditorUtilities.GetContent("Ambient Occlusion"), EditorStyles.boldLabel);
-            EditorGUI.indentLevel++;
-            {
-                EditorGUILayout.PropertyField(m_AOEnabled);
-
-                if (m_AOEnabled.boolValue)
-                {
-                    EditorGUILayout.PropertyField(m_AOIntensity);
-                    EditorGUILayout.PropertyField(m_AORadius);
-                    EditorGUILayout.PropertyField(m_AOQuality);
-
-                    if (camera != null && camera.actualRenderingPath == RenderingPath.DeferredShading && camera.allowHDR)
-                        EditorGUILayout.PropertyField(m_AOAmbientOnly);
                 }
             }
             EditorGUI.indentLevel--;
@@ -265,7 +212,7 @@ namespace UnityEditor.Rendering.PostProcessing
                 if (m_FogEnabled.boolValue)
                 {
                     EditorGUILayout.PropertyField(m_FogExcludeSkybox);
-                    EditorGUILayout.HelpBox("This effect adds fog compatibility to the deferred rendering path; actual fog settings should be set in the Lighting panel.", MessageType.Info);
+                    EditorGUILayout.HelpBox("This adds fog compatibility to the deferred rendering path; actual fog settings should be set in the Lighting panel.", MessageType.Info);
                 }
             }
             EditorGUI.indentLevel--;
