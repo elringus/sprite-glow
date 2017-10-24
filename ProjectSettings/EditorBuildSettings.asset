@@ -8,3 +8,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Demo.unity
     guid: 052f55763a75f2b4f86438698404f401
+  - enabled: 1
+    path: Assets/Scenes/TestAnimation.unity
+    guid: 9f35961df6f6ea347a6f2f9e04df210a
+  - enabled: 1
+    path: Assets/Scenes/TestBehaviour.unity
+    guid: 6d13694805cfb3345a95b1c057e03fa5
+  - enabled: 1
+    path: Assets/Scenes/TestPerformance.unity
+    guid: 695fa42438b0ca44ab43500a19adb984
