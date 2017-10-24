@@ -1,17 +1,12 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿using System.Collections;
+using UnityEngine;
 
 /// <summary>
 /// Used to test SpriteGlow functionality at runtime.
 /// </summary>
 public class TestSpriteGlowBehaviour : MonoBehaviour
 {
-    private void OnEnable ()
-    {
-        StartCoroutine(Test());
-    }
-
-    private IEnumerator Test ()
+    private IEnumerator Start ()
     {
         var spriteGlow = gameObject.AddComponent<SpriteGlow>();
         yield return new WaitForSeconds(.5f);

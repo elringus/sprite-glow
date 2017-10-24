@@ -2,27 +2,13 @@
 
 /// <summary>
 /// Adds an HDR outline over the sprite borders.
-/// Can be used in conjuction with a bloom post-processing to create a glow effect.
+/// Can be used in conjuction with bloom post-processing to create a glow effect.
 /// </summary>
 [AddComponentMenu("Effects/Sprite Glow")]
-[ExecuteInEditMode, RequireComponent(typeof(SpriteRenderer))]
+[RequireComponent(typeof(SpriteRenderer)), DisallowMultipleComponent, ExecuteInEditMode]
 public class SpriteGlow : MonoBehaviour
 {
-    public const string OUTSIDE_MATERIAL_KEYWORD = "SPRITE_OUTLINE_OUTSIDE";
-
-    public bool DrawOutside
-    {
-        get { return _drawOutside; }
-        set
-        {
-            if (_drawOutside != value)
-            {
-                _drawOutside = value;
-                SetMaterialProperties();
-            }
-        }
-    }
-
+    public SpriteRenderer Renderer { get { return spriteRenderer; } }
     public Color GlowColor
     {
         get { return _glowColor; }
@@ -35,7 +21,6 @@ public class SpriteGlow : MonoBehaviour
             }
         }
     }
-
     public int OutlineWidth
     {
         get { return _outlineWidth; }
@@ -48,7 +33,6 @@ public class SpriteGlow : MonoBehaviour
             }
         }
     }
-
     public float AlphaThreshold
     {
         get { return _alphaThreshold; }
@@ -61,41 +45,60 @@ public class SpriteGlow : MonoBehaviour
             }
         }
     }
+    public bool DrawOutside
+    {
+        get { return _drawOutside; }
+        set
+        {
+            if (_drawOutside != value)
+            {
+                _drawOutside = value;
+                SetMaterialProperties();
+            }
+        }
+    }
+    public bool EnableInstancing
+    {
+        get { return _enableInstancing; }
+        set
+        {
+            if (_enableInstancing != value)
+            {
+                _enableInstancing = value;
+                SetMaterialProperties();
+            }
+        }
+    }
 
-    [Tooltip("Whether the outline should only be drawn outside of the sprite borders.\nMake sure sprite texture has sufficient 'free' space for the required outline width.")]
-    [SerializeField]
-    private bool _drawOutside = false;
+    [Tooltip("Color of the outline. Make sure to set 'Current Brightness' > 1 to enable HDR."), ColorUsage(true, true, 1f, 10f, .125f, 3f)]
+    [SerializeField] private Color _glowColor = Color.white * 2f;
+    [Tooltip("Width of the outline, in texels."), Range(0, 10)]
+    [SerializeField] private int _outlineWidth = 1;
+    [Tooltip("Threshold to determine sprite borders."), Range(0f, 1f)]
+    [SerializeField] private float _alphaThreshold = .01f;
+    [Tooltip("Whether the outline should only be drawn outside of the sprite borders. Make sure sprite texture has sufficient transparent space for the required outline width.")]
+    [SerializeField] private bool _drawOutside = false;
+    [Tooltip("Whether to enable GPU instancing.")]
+    [SerializeField] private bool _enableInstancing = false;
 
-    [Tooltip("Custom material to draw an outline for the sprite.\nIf not provided, will use a default shared one.")]
-    public Material CustomOutlineMaterial;
-
-    [Tooltip("Color of the outline. Make sure to set 'Current Brightness' > 1 to enable HDR.")]
-    [SerializeField, ColorUsage(true, true, 1f, 10f, 0.125f, 3f)]
-    private Color _glowColor = Color.white * 2f;
-
-    [Tooltip("Width of the outline, in texels.")]
-    [SerializeField, Range(0, 10)]
-    private int _outlineWidth = 1;
-
-    [Tooltip("Threshold to determine sprite borders.")]
-    [SerializeField, Range(0f, 1f)]
-    private float _alphaThreshold = 0.01f;
-
-    private static Material sharedOutlineMaterial;
-    private static Material sharedOutsideOutlineMaterial;
     private SpriteRenderer spriteRenderer;
     private MaterialPropertyBlock materialProperties;
+    private int isOutlineEnabledId;
+    private int outlineColorId;
+    private int outlineSizeId;
+    private int alphaThresholdId;
+
+    private void Awake ()
+    {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        isOutlineEnabledId = Shader.PropertyToID("_IsOutlineEnabled");
+        outlineColorId = Shader.PropertyToID("_OutlineColor");
+        outlineSizeId = Shader.PropertyToID("_OutlineSize");
+        alphaThresholdId = Shader.PropertyToID("_AlphaThreshold");
+    }
 
     private void OnEnable ()
     {
-        if (!sharedOutlineMaterial) sharedOutlineMaterial = new Material(Shader.Find("Sprites/Outline"));
-        if (!sharedOutsideOutlineMaterial)
-        {
-            sharedOutsideOutlineMaterial = new Material(sharedOutlineMaterial.shader);
-            sharedOutsideOutlineMaterial.EnableKeyword(OUTSIDE_MATERIAL_KEYWORD);
-        }
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        materialProperties = new MaterialPropertyBlock();
         SetMaterialProperties();
     }
 
@@ -106,30 +109,30 @@ public class SpriteGlow : MonoBehaviour
 
     private void OnValidate ()
     {
-        // Used to control material properties via editor GUI.
-        if (isActiveAndEnabled)
-            SetMaterialProperties();
+        // Update material properties when changing serialized fields with editor GUI.
+        SetMaterialProperties();
     }
 
-    public void SetMaterialProperties ()
+    private void OnDidApplyAnimationProperties ()
     {
-        if (!spriteRenderer || materialProperties == null) return;
+        // Update material properties when changing serialized fields with Unity animation.
+        SetMaterialProperties();
+    }
 
-        if (CustomOutlineMaterial)
-        {
-            spriteRenderer.material = CustomOutlineMaterial;
-            if (DrawOutside && !CustomOutlineMaterial.IsKeywordEnabled(OUTSIDE_MATERIAL_KEYWORD))
-                CustomOutlineMaterial.EnableKeyword(OUTSIDE_MATERIAL_KEYWORD);
-            else if (!DrawOutside && CustomOutlineMaterial.IsKeywordEnabled(OUTSIDE_MATERIAL_KEYWORD))
-                CustomOutlineMaterial.DisableKeyword(OUTSIDE_MATERIAL_KEYWORD);
-        }
-        else spriteRenderer.sharedMaterial = DrawOutside ? sharedOutsideOutlineMaterial : sharedOutlineMaterial;
+    private void SetMaterialProperties ()
+    {
+        if (!spriteRenderer) return;
 
-        spriteRenderer.GetPropertyBlock(materialProperties);
-        materialProperties.SetFloat("_IsOutlineEnabled", isActiveAndEnabled ? 1 : 0);
-        materialProperties.SetColor("_OutlineColor", GlowColor);
-        materialProperties.SetFloat("_OutlineSize", OutlineWidth);
-        materialProperties.SetFloat("_AlphaThreshold", AlphaThreshold);
+        spriteRenderer.sharedMaterial = SpriteGlowMaterial.GetSharedFor(this);
+
+        if (materialProperties == null)
+            materialProperties = new MaterialPropertyBlock();
+
+        materialProperties.SetFloat(isOutlineEnabledId, isActiveAndEnabled ? 1 : 0);
+        materialProperties.SetColor(outlineColorId, GlowColor);
+        materialProperties.SetFloat(outlineSizeId, OutlineWidth);
+        materialProperties.SetFloat(alphaThresholdId, AlphaThreshold);
+
         spriteRenderer.SetPropertyBlock(materialProperties);
     }
 }

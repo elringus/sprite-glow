@@ -40,15 +40,18 @@ MonoBehaviour:
   diffusion:
     overrideState: 0
     value: 7
+  anamorphicRatio:
+    overrideState: 0
+    value: 0
   color:
     overrideState: 0
     value: {r: 1, g: 1, b: 1, a: 1}
   mobileOptimized:
     overrideState: 1
     value: 1
-  lensTexture:
-    overrideState: 1
-    value: {fileID: 2800000, guid: 69e847bbff1cf5449a4ee0bbd045dbc9, type: 3}
-  lensIntensity:
-    overrideState: 1
-    value: 10
+  dirtTexture:
+    overrideState: 0
+    value: {fileID: 0}
+  dirtIntensity:
+    overrideState: 0
+    value: 0
