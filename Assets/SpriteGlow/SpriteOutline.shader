@@ -49,6 +49,10 @@ Shader "Sprites/Outline"
             #pragma multi_compile _ ETC1_EXTERNAL_ALPHA
             #pragma multi_compile _ SPRITE_OUTLINE_OUTSIDE
 
+            #ifndef SAMPLE_DEPTH_LIMIT
+            #define SAMPLE_DEPTH_LIMIT 10
+            #endif
+
             #ifdef UNITY_INSTANCING_ENABLED
             UNITY_INSTANCING_CBUFFER_START(PerDrawSprite)
             fixed4 unity_SpriteRendererColorArray[UNITY_INSTANCED_ARRAY_SIZE];
@@ -126,8 +130,7 @@ Shader "Sprites/Outline"
 
                 // Looking for a transparent pixel (sprite border from inside) around computed fragment with given depth (_OutlineSize).
                 // Also checking if sampled fragment is out of the texture space (UV is out of 0-1 range); considering such fragment as sprite border.
-                [unroll(10)]
-                for (int i = 1; i < outlineSize + 1; i++)
+                for (int i = 1; i <= SAMPLE_DEPTH_LIMIT; i++)
                 {
                     float2 pixelUpTexCoord = texCoord + float2(0, i * _MainTex_TexelSize.y);
                     fixed pixelUpAlpha = pixelUpTexCoord.y > 1.0 ? 0.0 : tex2D(_MainTex, pixelUpTexCoord).a;
@@ -144,6 +147,8 @@ Shader "Sprites/Outline"
                     float2 pixelLeftTexCoord = texCoord - float2(i * _MainTex_TexelSize.x, 0);
                     fixed pixelLeftAlpha = pixelLeftTexCoord.x < 0.0 ? 0.0 : tex2D(_MainTex, pixelLeftTexCoord).a;
                     if (pixelLeftAlpha <= alphaThreshold) return 1;
+
+                    if (i > outlineSize) break;
                 }
 
                 return 0;
@@ -158,8 +163,7 @@ Shader "Sprites/Outline"
                 if (sampledColor.a > alphaThreshold) return 0;
 
                 // Looking for an opaque pixel (sprite border from outise) around computed fragment with given depth (_OutlineSize).
-                [unroll(10)]
-                for (int i = 1; i < outlineSize + 1; i++)
+                for (int i = 1; i <= SAMPLE_DEPTH_LIMIT; i++)
                 {
                     float2 pixelUpTexCoord = texCoord + float2(0, i * _MainTex_TexelSize.y);
                     fixed pixelUpAlpha = tex2D(_MainTex, pixelUpTexCoord).a;
@@ -176,6 +180,8 @@ Shader "Sprites/Outline"
                     float2 pixelLeftTexCoord = texCoord - float2(i * _MainTex_TexelSize.x, 0);
                     fixed pixelLeftAlpha = tex2D(_MainTex, pixelLeftTexCoord).a;
                     if (pixelLeftAlpha > alphaThreshold) return 1;
+
+                    if (i > outlineSize) break;
                 }
 
                 return 0;
@@ -197,13 +203,13 @@ Shader "Sprites/Outline"
             {
                 UNITY_SETUP_INSTANCE_ID(vertexOutput);
 
+                fixed4 color = SampleSpriteTexture(vertexOutput.TexCoord) * vertexOutput.Color;
+                color.rgb *= color.a;
+
                 int isOutlineEnabled = UNITY_ACCESS_INSTANCED_PROP(_IsOutlineEnabled);
                 fixed4 outlineColor = UNITY_ACCESS_INSTANCED_PROP(_OutlineColor);
                 int outlineSize = UNITY_ACCESS_INSTANCED_PROP(_OutlineSize);
                 float alphaThreshold = UNITY_ACCESS_INSTANCED_PROP(_AlphaThreshold);
-
-                fixed4 color = SampleSpriteTexture(vertexOutput.TexCoord) * vertexOutput.Color;
-                color.rgb *= color.a;
 
                 #ifdef SPRITE_OUTLINE_OUTSIDE
                 int shouldDrawOutline = ShouldDrawOutlineOutside(color, vertexOutput.TexCoord, isOutlineEnabled, outlineSize, alphaThreshold);
