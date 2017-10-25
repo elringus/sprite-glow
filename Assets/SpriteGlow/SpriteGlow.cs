@@ -21,6 +21,18 @@ public class SpriteGlow : MonoBehaviour
             }
         }
     }
+    public float GlowBrightness
+    {
+        get { return _glowBrightness; }
+        set
+        {
+            if (_glowBrightness != value)
+            {
+                _glowBrightness = value;
+                SetMaterialProperties();
+            }
+        }
+    }
     public int OutlineWidth
     {
         get { return _outlineWidth; }
@@ -70,8 +82,10 @@ public class SpriteGlow : MonoBehaviour
         }
     }
 
-    [Tooltip("Color of the outline. Make sure to set 'Current Brightness' > 1 to enable HDR."), ColorUsage(true, true, 1f, 10f, .125f, 3f)]
-    [SerializeField] private Color _glowColor = Color.white * 2f;
+    [Tooltip("Base color of the glow.")]
+    [SerializeField] private Color _glowColor = Color.white;
+    [Tooltip ("The brightness (power) of the glow."), Range(1, 10)]
+    [SerializeField] private float _glowBrightness = 2f;
     [Tooltip("Width of the outline, in texels."), Range(0, 10)]
     [SerializeField] private int _outlineWidth = 1;
     [Tooltip("Threshold to determine sprite borders."), Range(0f, 1f)]
@@ -129,7 +143,7 @@ public class SpriteGlow : MonoBehaviour
             materialProperties = new MaterialPropertyBlock();
 
         materialProperties.SetFloat(isOutlineEnabledId, isActiveAndEnabled ? 1 : 0);
-        materialProperties.SetColor(outlineColorId, GlowColor);
+        materialProperties.SetColor(outlineColorId, GlowColor * GlowBrightness);
         materialProperties.SetFloat(outlineSizeId, OutlineWidth);
         materialProperties.SetFloat(alphaThresholdId, AlphaThreshold);
 

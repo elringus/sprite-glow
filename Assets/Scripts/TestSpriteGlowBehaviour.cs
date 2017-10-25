@@ -20,7 +20,9 @@ public class TestSpriteGlowBehaviour : MonoBehaviour
         yield return new WaitForSeconds(.5f);
         spriteGlow.DrawOutside = false;
         yield return new WaitForSeconds(.5f);
-        spriteGlow.GlowColor = Color.red * 3f;
+        spriteGlow.GlowColor = Color.red;
+        yield return new WaitForSeconds(.5f);
+        spriteGlow.GlowBrightness = 1.5f;
         yield return new WaitForSeconds(.5f);
         Destroy(spriteGlow);
     }

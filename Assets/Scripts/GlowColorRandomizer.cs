@@ -13,7 +13,8 @@ public class GlowColorRandomizer : MonoBehaviour
     private void OnEnable ()
     {
         spriteGlow.enabled = true;
-        spriteGlow.GlowColor = Random.ColorHSV() * 2f;
+        spriteGlow.GlowColor = Random.ColorHSV();
+        spriteGlow.GlowBrightness = Random.Range(1.5f, 3.0f);
     }
 
     private void OnDisable ()

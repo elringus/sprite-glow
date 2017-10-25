@@ -292,7 +292,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _glowColor: {r: 0.2647059, g: 2, b: 1.9281945, a: 1}
+  _glowColor: {r: 0.19852942, g: 1, b: 0.96683556, a: 1}
+  _glowBrightness: 1.5
   _outlineWidth: 3
   _alphaThreshold: 0.01
   _drawOutside: 0
@@ -424,7 +425,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _glowColor: {r: 1.75, g: 0, b: 0, a: 1}
+  _glowColor: {r: 1, g: 0.25735295, b: 0.25735295, a: 1}
+  _glowBrightness: 2
   _outlineWidth: 1
   _alphaThreshold: 0.01
   _drawOutside: 0
