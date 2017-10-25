@@ -49,6 +49,10 @@ Shader "Sprites/Outline"
             #pragma multi_compile _ ETC1_EXTERNAL_ALPHA
             #pragma multi_compile _ SPRITE_OUTLINE_OUTSIDE
 
+            #ifndef SAMPLE_DEPTH_LIMIT
+            #define SAMPLE_DEPTH_LIMIT 10
+            #endif
+
             #ifdef UNITY_INSTANCING_ENABLED
             UNITY_INSTANCING_CBUFFER_START(PerDrawSprite)
             fixed4 unity_SpriteRendererColorArray[UNITY_INSTANCED_ARRAY_SIZE];
@@ -126,7 +130,7 @@ Shader "Sprites/Outline"
 
                 // Looking for a transparent pixel (sprite border from inside) around computed fragment with given depth (_OutlineSize).
                 // Also checking if sampled fragment is out of the texture space (UV is out of 0-1 range); considering such fragment as sprite border.
-                for (int i = 1; i <= 10; i++)
+                for (int i = 1; i <= SAMPLE_DEPTH_LIMIT; i++)
                 {
                     float2 pixelUpTexCoord = texCoord + float2(0, i * _MainTex_TexelSize.y);
                     fixed pixelUpAlpha = pixelUpTexCoord.y > 1.0 ? 0.0 : tex2D(_MainTex, pixelUpTexCoord).a;
@@ -159,7 +163,7 @@ Shader "Sprites/Outline"
                 if (sampledColor.a > alphaThreshold) return 0;
 
                 // Looking for an opaque pixel (sprite border from outise) around computed fragment with given depth (_OutlineSize).
-                for (int i = 1; i <= 10; i++)
+                for (int i = 1; i <= SAMPLE_DEPTH_LIMIT; i++)
                 {
                     float2 pixelUpTexCoord = texCoord + float2(0, i * _MainTex_TexelSize.y);
                     fixed pixelUpAlpha = tex2D(_MainTex, pixelUpTexCoord).a;
