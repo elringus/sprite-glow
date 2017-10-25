@@ -16,15 +16,20 @@ Character sprite by [Mikhail Pigichka](https://www.facebook.com/hundewache).
 ## FAQ
 
 ### Why the glow doesn't appear?
-Make sure you've set 'Current Brightness' high enough:
+Make sure:
 
-![](https://i.gyazo.com/101ac74ac1a6cf1af0814b6b02186174.png)
+* Camera 'Allow HDR' is enabled:
 
-### How to change glow brightness at runtime?
-You can change the brightness in scripts by multiplying the ‘GlowColor’ value.
+![](https://i.gyazo.com/e5f67d94e6ed1e5e3652d6ee52668b85.png)
+
+* You've set 'Glow Brightness' high enough:
+
+![](https://i.gyazo.com/94fe6e143e310a526b3428c6c62b45bf.png)
 
 ### Why the glow appears on the whole image?
 Make sure 'Threshold' value of the bloom image effect is set high enough. It's usually 1 to 1.5, depending on the bloom solution.
+
+![](https://i.gyazo.com/bd3961f0efbceddca9c4a077d7b9a6d4.png)
 
 ### It's still not working
 Please check the active [issues](https://github.com/Elringus/SpriteGlow/issues).
