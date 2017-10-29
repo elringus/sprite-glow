@@ -17,6 +17,43 @@ namespace UnityCommon
         }
     
         /// <summary>
+        /// More performant version of string.EndsWith method.
+        /// https://docs.unity3d.com/Manual/BestPracticeUnderstandingPerformanceInUnity5.html
+        /// </summary>
+        public static bool EndsWithFast (this string content, string match)
+        {
+            int ap = content.Length - 1;
+            int bp = match.Length - 1;
+    
+            while (ap >= 0 && bp >= 0 && content[ap] == match[bp])
+            {
+                ap--;
+                bp--;
+            }
+    
+            return (bp < 0 && content.Length >= match.Length) || (ap < 0 && match.Length >= content.Length);
+        }
+    
+        /// <summary>
+        /// More performant version of string.StartsWith method.
+        /// https://docs.unity3d.com/Manual/BestPracticeUnderstandingPerformanceInUnity5.html
+        /// </summary>
+        public static bool StartsWithFast (this string content, string match)
+        {
+            int aLen = content.Length;
+            int bLen = match.Length;
+            int ap = 0, bp = 0;
+    
+            while (ap < aLen && bp < bLen && content[ap] == match[bp])
+            {
+                ap++;
+                bp++;
+            }
+    
+            return (bp == bLen && aLen >= bLen) || (ap == aLen && bLen >= aLen);
+        }
+    
+        /// <summary>
         /// Attempts to extract content between the specified matches (on first occurence).
         /// </summary>
         public static string GetBetween (this string content, string startMatchString, string endMatchString)
@@ -121,7 +158,7 @@ namespace UnityCommon
         /// </summary>
         public static string TrimEnd (this string source, string value)
         {
-            if (!source.EndsWith(value))
+            if (!source.EndsWithFast(value))
                 return source;
     
             return source.Remove(source.LastIndexOf(value));
