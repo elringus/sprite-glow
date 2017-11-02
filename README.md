@@ -18,6 +18,10 @@ Character sprite by [Mikhail Pigichka](https://www.facebook.com/hundewache).
 ### Why the glow doesn't appear?
 Make sure:
 
+* HDR is enabled for target platform and tier (Edit > Project Settings > Graphics):
+
+![](https://i.gyazo.com/3523e3174080dce3347874e59539e58c.png)
+
 * Camera 'Allow HDR' is enabled:
 
 ![](https://i.gyazo.com/e5f67d94e6ed1e5e3652d6ee52668b85.png)
