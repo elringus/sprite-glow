@@ -16,6 +16,8 @@ public class SpriteGlowMaterial : Material
     public SpriteGlowMaterial (Texture spriteTexture, bool drawOutside = false, bool instancingEnabled = false) 
         : base(OUTLINE_SHADER)
     {
+        if (!OUTLINE_SHADER) Debug.LogError(string.Format("{0} shader not found. Make sure the shader is included to the build.", OUTLINE_SHADER_NAME));
+
         mainTexture = spriteTexture;
         if (drawOutside) EnableKeyword(OUTSIDE_MATERIAL_KEYWORD);
         if (instancingEnabled) enableInstancing = true;
