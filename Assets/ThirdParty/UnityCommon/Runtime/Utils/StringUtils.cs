@@ -1,4 +1,4 @@
-﻿// Copyright 2012-2017 Elringus (Artyom Sovetnikov). All Rights Reserved.
+﻿// Copyright 2012-2018 Elringus (Artyom Sovetnikov). All Rights Reserved.
 
 namespace UnityCommon
 {
@@ -143,17 +143,6 @@ namespace UnityCommon
         }
     
         /// <summary>
-        /// Checks whether string is null, empty or consists of whitespace chars.
-        /// </summary>
-        public static bool IsNullEmptyOrWhiteSpace (string content)
-        {
-            if (String.IsNullOrEmpty(content))
-                return true;
-    
-            return String.IsNullOrEmpty(content.Trim());
-        }
-    
-        /// <summary>
         /// Removes mathing trailing string.
         /// </summary>
         public static string TrimEnd (this string source, string value)
@@ -162,6 +151,56 @@ namespace UnityCommon
                 return source;
     
             return source.Remove(source.LastIndexOf(value));
+        }
+    
+        /// <summary>
+        /// Checks whether string is null, empty or consists of whitespace chars.
+        /// </summary>
+        public static bool IsNullEmptyOrWhiteSpace (string content)
+        {
+            if (String.IsNullOrEmpty(content))
+                return true;
+    
+            return String.IsNullOrEmpty(content.TrimFull());
+        }
+    
+        /// <summary>
+        /// Performes <see cref="string.Trim"/> additionally removing any BOM and other service symbols.
+        /// </summary>
+        public static string TrimFull (this string source)
+        {
+            #if UNITY_WEBGL // WebGL build under .NET 4.6 fails when using Trim with UTF-8 chars. (should be fixed in Unity 2018.1)
+            var whitespaceChars = new System.Collections.Generic.List<char> {
+                '\u0009','\u000A','\u000B','\u000C','\u000D','\u0020','\u0085','\u00A0',
+                '\u1680','\u2000','\u2001','\u2002','\u2003','\u2004','\u2005','\u2006',
+                '\u2007','\u2008','\u2009','\u200A','\u2028','\u2029','\u202F','\u205F',
+                '\u3000','\uFEFF','\u200B',
+            };
+    
+            // Trim start.
+            if (string.IsNullOrEmpty(source)) return source;
+            var c = source[0];
+            while (whitespaceChars.Contains(c))
+            {
+                if (source.Length <= 1) return string.Empty;
+                source = source.Substring(1);
+                c = source[0];
+            }
+    
+            // Trim end.
+            if (string.IsNullOrEmpty(source)) return source;
+            c = source[source.Length - 1];
+            while (whitespaceChars.Contains(c))
+            {
+                if (source.Length <= 1) return string.Empty;
+                source = source.Substring(0, source.Length - 1);
+                c = source[source.Length - 1];
+            }
+    
+            return source;
+            #else
+            return source.Trim().Trim(new char[] { '\uFEFF', '\u200B' });
+            #endif
         }
     }
     
