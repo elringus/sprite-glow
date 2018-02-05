@@ -1,13 +1,14 @@
-﻿using UnityEngine;
+﻿using SpriteGlow;
+using UnityEngine;
 
-[RequireComponent(typeof(SpriteGlow))]
+[RequireComponent(typeof(SpriteGlowEffect))]
 public class GlowColorRandomizer : MonoBehaviour
 {
-    private SpriteGlow spriteGlow;
+    private SpriteGlowEffect spriteGlow;
 
     private void Awake ()
     {
-        spriteGlow = GetComponent<SpriteGlow>();
+        spriteGlow = GetComponent<SpriteGlowEffect>();
     }
 
     private void OnEnable ()

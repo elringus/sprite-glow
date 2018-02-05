@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using SpriteGlow;
+using System.Collections;
 using UnityEngine;
 
 /// <summary>
@@ -8,7 +9,7 @@ public class TestSpriteGlowBehaviour : MonoBehaviour
 {
     private IEnumerator Start ()
     {
-        var spriteGlow = gameObject.AddComponent<SpriteGlow>();
+        var spriteGlow = gameObject.AddComponent<SpriteGlowEffect>();
         yield return new WaitForSeconds(.5f);
         spriteGlow.enabled = false;
         yield return new WaitForSeconds(.5f);
