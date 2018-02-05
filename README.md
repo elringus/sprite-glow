@@ -1,5 +1,7 @@
 ## Download unitypackage
-[SpriteGlow.unitypackage](https://github.com/Elringus/SpriteGlow/releases/download/v2.3-release/SpriteGlow.unitypackage)
+For Unity 2017.3 and later: [SpriteGlow.unitypackage](https://github.com/Elringus/SpriteGlow/releases/download/v2.3-release/SpriteGlow.unitypackage) 
+
+Check [releases](https://github.com/Elringus/SpriteGlow/releases) for previous Unity versions support.
 
 ## Description
 The glow effect is achieved using sprite outline in HDR colors (applied via shader) and bloom post-processing.
@@ -8,8 +10,6 @@ The glow effect is achieved using sprite outline in HDR colors (applied via shad
 ![Glow Color](https://i.gyazo.com/c8f8ec8a276aa4781b52732c521691db.gif)
 
 For the bloom effect [KinoBloom](https://github.com/keijiro/KinoBloom) is used. You can replace it with similar 3rd-party solutions.
-
-Master branch aims to be on par with the latest Unity version. See [releases](https://github.com/Elringus/SpriteGlow/releases) for previous versions support.
 
 Character sprite by [Mikhail Pigichka](https://www.facebook.com/hundewache).
 
