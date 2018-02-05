@@ -85,23 +85,17 @@ namespace SpriteGlow
         }
 
         [Tooltip("Base color of the glow.")]
-        [SerializeField]
-        private Color _glowColor = Color.white;
+        [SerializeField] private Color _glowColor = Color.white;
         [Tooltip("The brightness (power) of the glow."), Range(1, 10)]
-        [SerializeField]
-        private float _glowBrightness = 2f;
+        [SerializeField] private float _glowBrightness = 2f;
         [Tooltip("Width of the outline, in texels."), Range(0, 10)]
-        [SerializeField]
-        private int _outlineWidth = 1;
+        [SerializeField] private int _outlineWidth = 1;
         [Tooltip("Threshold to determine sprite borders."), Range(0f, 1f)]
-        [SerializeField]
-        private float _alphaThreshold = .01f;
+        [SerializeField] private float _alphaThreshold = .01f;
         [Tooltip("Whether the outline should only be drawn outside of the sprite borders. Make sure sprite texture has sufficient transparent space for the required outline width.")]
-        [SerializeField]
-        private bool _drawOutside = false;
+        [SerializeField] private bool _drawOutside = false;
         [Tooltip("Whether to enable GPU instancing.")]
-        [SerializeField]
-        private bool _enableInstancing = false;
+        [SerializeField] private bool _enableInstancing = false;
 
         private SpriteRenderer spriteRenderer;
         private MaterialPropertyBlock materialProperties;
