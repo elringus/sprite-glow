@@ -15,8 +15,8 @@ Shader "Sprites/Outline"
 
         [MaterialToggle] _IsOutlineEnabled("Enable Outline", float) = 0
         [HDR] _OutlineColor("Outline Color", Color) = (1,1,1,1)
-        _OutlineSize("Outline Size", Range (1, 10)) = 1
-        _AlphaThreshold("Alpha Threshold", Range (0, 1)) = 0.01
+        _OutlineSize("Outline Size", Range(1, 10)) = 1
+        _AlphaThreshold("Alpha Threshold", Range(0, 1)) = 0.01
     }
 
     SubShader
