@@ -17,3 +17,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TestPerformance.unity
     guid: 695fa42438b0ca44ab43500a19adb984
+  - enabled: 1
+    path: Assets/Scenes/TilemapExample.unity
+    guid: 730235cf06451a646b0a6d223bd85860
