@@ -20,3 +20,6 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/TilemapExample.unity
     guid: 730235cf06451a646b0a6d223bd85860
+  - enabled: 1
+    path: Assets/Scenes/UIExample.unity
+    guid: cd2121e68021cf9479f0abc3a0c6a0df
