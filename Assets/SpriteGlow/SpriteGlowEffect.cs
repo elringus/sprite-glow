@@ -3,14 +3,14 @@
 namespace SpriteGlow
 {
     /// <summary>
-    /// Adds an HDR outline over the sprite borders.
+    /// Adds an HDR outline over the <see cref="SpriteRenderer"/>'s sprite borders.
     /// Can be used in conjuction with bloom post-processing to create a glow effect.
     /// </summary>
     [AddComponentMenu("Effects/Sprite Glow")]
     [RequireComponent(typeof(SpriteRenderer)), DisallowMultipleComponent, ExecuteInEditMode]
     public class SpriteGlowEffect : MonoBehaviour
     {
-        public SpriteRenderer Renderer { get { return spriteRenderer; } }
+        public SpriteRenderer Renderer { get; private set; }
         public Color GlowColor
         {
             get { return _glowColor; }
@@ -97,7 +97,6 @@ namespace SpriteGlow
         [Tooltip("Whether to enable GPU instancing.")]
         [SerializeField] private bool _enableInstancing = false;
 
-        private SpriteRenderer spriteRenderer;
         private MaterialPropertyBlock materialProperties;
         private int isOutlineEnabledId;
         private int outlineColorId;
@@ -106,7 +105,7 @@ namespace SpriteGlow
 
         private void Awake ()
         {
-            spriteRenderer = GetComponent<SpriteRenderer>();
+            Renderer = GetComponent<SpriteRenderer>();
             isOutlineEnabledId = Shader.PropertyToID("_IsOutlineEnabled");
             outlineColorId = Shader.PropertyToID("_OutlineColor");
             outlineSizeId = Shader.PropertyToID("_OutlineSize");
@@ -137,9 +136,9 @@ namespace SpriteGlow
 
         private void SetMaterialProperties ()
         {
-            if (!spriteRenderer) return;
+            if (!Renderer) return;
 
-            spriteRenderer.sharedMaterial = SpriteGlowMaterial.GetSharedFor(this);
+            Renderer.sharedMaterial = SpriteGlowMaterial.GetSharedFor(this);
 
             if (materialProperties == null)
                 materialProperties = new MaterialPropertyBlock();
@@ -149,7 +148,7 @@ namespace SpriteGlow
             materialProperties.SetFloat(outlineSizeId, OutlineWidth);
             materialProperties.SetFloat(alphaThresholdId, AlphaThreshold);
 
-            spriteRenderer.SetPropertyBlock(materialProperties);
+            Renderer.SetPropertyBlock(materialProperties);
         }
     }
 }
