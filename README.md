@@ -1,5 +1,5 @@
 ## Download unitypackage
-For Unity 2017.3 and later: [SpriteGlow.unitypackage](https://github.com/Elringus/SpriteGlow/releases/download/v2.3-release/SpriteGlow.unitypackage). Check [releases](https://github.com/Elringus/SpriteGlow/releases) for previous versions support.
+For Unity 2017.3 and later: [SpriteGlow.unitypackage](https://github.com/Elringus/SpriteGlow/releases/download/v2.4-release/SpriteGlow.unitypackage). Check [releases](https://github.com/Elringus/SpriteGlow/releases) for previous versions support.
 
 ## Description
 The glow effect is achieved using sprite outline in HDR colors (applied via shader) and bloom post-processing.
@@ -12,6 +12,11 @@ For the bloom effect [KinoBloom](https://github.com/keijiro/KinoBloom) is used. 
 Character sprite by [Mikhail Pigichka](https://www.facebook.com/hundewache).
 
 ## FAQ
+
+### Can I use the effect with components other than SpriteRenderer (UI Image, Tilemap, etc)?
+Not directly (after all, this is **Sprite**Glow), but it's possible if the component is using a shader similar to sprites (e.g UI objects, tilemaps and other "2D" stuff). For this you will have to create a material based on the `Sprites/Outline` shader and manually apply it to the component. You can then control all the glow parameters using the material editor. In the project you can find scenes with the examples for applying the effect to UI Button and a tilemap.
+
+![](https://i.gyazo.com/6c92f315d8a25600bf4ec930c5b7de3e.png)
 
 ### Why the glow doesn't appear?
 Make sure:
