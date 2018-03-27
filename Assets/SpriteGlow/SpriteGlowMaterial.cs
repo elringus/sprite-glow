@@ -27,17 +27,17 @@ namespace SpriteGlow
 
         public static Material GetSharedFor (SpriteGlowEffect spriteGlow)
         {
-            var material = sharedMaterials.Find(m =>
-                m.SpriteTexture == spriteGlow.Renderer.sprite.texture &&
-                m.DrawOutside == spriteGlow.DrawOutside &&
-                m.InstancingEnabled == spriteGlow.EnableInstancing);
-
-            if (!material)
+            for (int i = 0; i < sharedMaterials.Count; i++)
             {
-                material = new SpriteGlowMaterial(spriteGlow.Renderer.sprite.texture, spriteGlow.DrawOutside, spriteGlow.EnableInstancing);
-                material.hideFlags = HideFlags.DontSaveInBuild | HideFlags.DontSaveInEditor | HideFlags.NotEditable;
-                sharedMaterials.Add(material);
+                if (sharedMaterials[i].SpriteTexture == spriteGlow.Renderer.sprite.texture &&
+                    sharedMaterials[i].DrawOutside == spriteGlow.DrawOutside &&
+                    sharedMaterials[i].InstancingEnabled == spriteGlow.EnableInstancing)
+                    return sharedMaterials[i];
             }
+
+            var material = new SpriteGlowMaterial(spriteGlow.Renderer.sprite.texture, spriteGlow.DrawOutside, spriteGlow.EnableInstancing);
+            material.hideFlags = HideFlags.DontSaveInBuild | HideFlags.DontSaveInEditor | HideFlags.NotEditable;
+            sharedMaterials.Add(material);
 
             return material;
         }
