@@ -7,7 +7,9 @@ The glow effect is achieved using sprite outline in HDR colors (applied via shad
 ![Glow Intensity](https://i.gyazo.com/698f7d444d334b41657f056fb1ac94c7.gif) 
 ![Glow Color](https://i.gyazo.com/c8f8ec8a276aa4781b52732c521691db.gif)
 
-For the bloom effect [KinoBloom](https://github.com/keijiro/KinoBloom) is used. You can replace it with similar 3rd-party solutions.
+For the bloom effect [Unity Post Processing Stack](https://github.com/Unity-Technologies/PostProcessing) is used. You can replace it with similar 3rd-party solutions.
+
+The effect is compatible with the [Lightweight Render Pipeline](https://github.com/Unity-Technologies/ScriptableRenderPipeline/wiki/Lightweight-Render-Pipeline) (HDR should be enabled in the pipeline asset settings).
 
 Character sprite by [Mikhail Pigichka](https://www.facebook.com/hundewache).
 
