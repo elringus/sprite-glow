@@ -1,10 +1,10 @@
 ﻿// Copyright 2012-2018 Elringus (Artyom Sovetnikov). All Rights Reserved.
 
+using System;
+using UnityEngine;
+
 namespace UnityCommon
 {
-    using System;
-    using UnityEngine;
-    
     public static class StringUtils
     {
         /// <summary>
@@ -15,7 +15,7 @@ namespace UnityCommon
             Debug.Assert(content != null);
             return content.Equals(comparedString, StringComparison.OrdinalIgnoreCase);
         }
-    
+
         /// <summary>
         /// More performant version of string.EndsWith method.
         /// https://docs.unity3d.com/Manual/BestPracticeUnderstandingPerformanceInUnity5.html
@@ -24,16 +24,16 @@ namespace UnityCommon
         {
             int ap = content.Length - 1;
             int bp = match.Length - 1;
-    
+
             while (ap >= 0 && bp >= 0 && content[ap] == match[bp])
             {
                 ap--;
                 bp--;
             }
-    
+
             return (bp < 0 && content.Length >= match.Length) || (ap < 0 && match.Length >= content.Length);
         }
-    
+
         /// <summary>
         /// More performant version of string.StartsWith method.
         /// https://docs.unity3d.com/Manual/BestPracticeUnderstandingPerformanceInUnity5.html
@@ -43,16 +43,16 @@ namespace UnityCommon
             int aLen = content.Length;
             int bLen = match.Length;
             int ap = 0, bp = 0;
-    
+
             while (ap < aLen && bp < bLen && content[ap] == match[bp])
             {
                 ap++;
                 bp++;
             }
-    
+
             return (bp == bLen && aLen >= bLen) || (ap == aLen && bLen >= aLen);
         }
-    
+
         /// <summary>
         /// Attempts to extract content between the specified matches (on first occurence).
         /// </summary>
@@ -67,7 +67,7 @@ namespace UnityCommon
             }
             else return null;
         }
-    
+
         /// <summary>
         /// Attempts to extract content before the specified match (on first occurence).
         /// </summary>
@@ -81,7 +81,7 @@ namespace UnityCommon
             }
             else return null;
         }
-    
+
         /// <summary>
         /// Attempts to extract content before the specified match (on last occurence).
         /// </summary>
@@ -95,7 +95,7 @@ namespace UnityCommon
             }
             else return null;
         }
-    
+
         /// <summary>
         /// Attempts to extract content after the specified match (on last occurence).
         /// </summary>
@@ -110,7 +110,7 @@ namespace UnityCommon
             }
             else return null;
         }
-    
+
         /// <summary>
         /// Attempts to extract content after the specified match (on first occurence).
         /// </summary>
@@ -125,7 +125,7 @@ namespace UnityCommon
             }
             else return null;
         }
-    
+
         /// <summary>
         /// Splits the string using new line symbol as a separator.
         /// Will split by all type of new lines, independant of environment.
@@ -133,7 +133,7 @@ namespace UnityCommon
         public static string[] SplitByNewLine (this string content)
         {
             if (string.IsNullOrEmpty(content)) return null;
-    
+
             // "\r\n"   (\u000D\u000A)  Windows
             // "\n"     (\u000A)        Unix
             // "\r"     (\u000D)        Mac
@@ -141,7 +141,7 @@ namespace UnityCommon
             // in not the same environment we running the program in.
             return content.Split(new string[] { "\r\n", "\n", "\r" }, StringSplitOptions.RemoveEmptyEntries);
         }
-    
+
         /// <summary>
         /// Removes mathing trailing string.
         /// </summary>
@@ -149,10 +149,10 @@ namespace UnityCommon
         {
             if (!source.EndsWithFast(value))
                 return source;
-    
+
             return source.Remove(source.LastIndexOf(value));
         }
-    
+
         /// <summary>
         /// Checks whether string is null, empty or consists of whitespace chars.
         /// </summary>
@@ -160,10 +160,10 @@ namespace UnityCommon
         {
             if (String.IsNullOrEmpty(content))
                 return true;
-    
+
             return String.IsNullOrEmpty(content.TrimFull());
         }
-    
+
         /// <summary>
         /// Performes <see cref="string.Trim"/> additionally removing any BOM and other service symbols.
         /// </summary>
@@ -176,7 +176,7 @@ namespace UnityCommon
                 '\u2007','\u2008','\u2009','\u200A','\u2028','\u2029','\u202F','\u205F',
                 '\u3000','\uFEFF','\u200B',
             };
-    
+
             // Trim start.
             if (string.IsNullOrEmpty(source)) return source;
             var c = source[0];
@@ -186,7 +186,7 @@ namespace UnityCommon
                 source = source.Substring(1);
                 c = source[0];
             }
-    
+
             // Trim end.
             if (string.IsNullOrEmpty(source)) return source;
             c = source[source.Length - 1];
@@ -196,12 +196,29 @@ namespace UnityCommon
                 source = source.Substring(0, source.Length - 1);
                 c = source[source.Length - 1];
             }
-    
+
             return source;
             #else
             return source.Trim().Trim(new char[] { '\uFEFF', '\u200B' });
             #endif
         }
+
+        /// <summary>
+        /// Given a file size (length in bytes), produces a human-readable string.
+        /// </summary>
+        /// <param name="size">Bytes length of the file.</param>
+        /// <param name="unit">Minimum unit to use: { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" }.</param>
+        public static string FormatFileSize (double size, int unit = 0)
+        {
+            string[] units = { "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
+
+            while (size >= 1024)
+            {
+                size /= 1024;
+                ++unit;
+            }
+
+            return string.Format("{0:G4} {1}", size, units[unit]);
+        }
     }
-    
 }
