@@ -13,89 +13,89 @@ namespace SpriteGlow
         public SpriteRenderer Renderer { get; private set; }
         public Color GlowColor
         {
-            get { return _glowColor; }
+            get { return glowColor; }
             set
             {
-                if (_glowColor != value)
+                if (glowColor != value)
                 {
-                    _glowColor = value;
+                    glowColor = value;
                     SetMaterialProperties();
                 }
             }
         }
         public float GlowBrightness
         {
-            get { return _glowBrightness; }
+            get { return glowBrightness; }
             set
             {
-                if (_glowBrightness != value)
+                if (glowBrightness != value)
                 {
-                    _glowBrightness = value;
+                    glowBrightness = value;
                     SetMaterialProperties();
                 }
             }
         }
         public int OutlineWidth
         {
-            get { return _outlineWidth; }
+            get { return outlineWidth; }
             set
             {
-                if (_outlineWidth != value)
+                if (outlineWidth != value)
                 {
-                    _outlineWidth = value;
+                    outlineWidth = value;
                     SetMaterialProperties();
                 }
             }
         }
         public float AlphaThreshold
         {
-            get { return _alphaThreshold; }
+            get { return alphaThreshold; }
             set
             {
-                if (_alphaThreshold != value)
+                if (alphaThreshold != value)
                 {
-                    _alphaThreshold = value;
+                    alphaThreshold = value;
                     SetMaterialProperties();
                 }
             }
         }
         public bool DrawOutside
         {
-            get { return _drawOutside; }
+            get { return drawOutside; }
             set
             {
-                if (_drawOutside != value)
+                if (drawOutside != value)
                 {
-                    _drawOutside = value;
+                    drawOutside = value;
                     SetMaterialProperties();
                 }
             }
         }
         public bool EnableInstancing
         {
-            get { return _enableInstancing; }
+            get { return enableInstancing; }
             set
             {
-                if (_enableInstancing != value)
+                if (enableInstancing != value)
                 {
-                    _enableInstancing = value;
+                    enableInstancing = value;
                     SetMaterialProperties();
                 }
             }
         }
 
         [Tooltip("Base color of the glow.")]
-        [SerializeField] private Color _glowColor = Color.white;
+        [SerializeField] private Color glowColor = Color.white;
         [Tooltip("The brightness (power) of the glow."), Range(1, 10)]
-        [SerializeField] private float _glowBrightness = 2f;
+        [SerializeField] private float glowBrightness = 2f;
         [Tooltip("Width of the outline, in texels."), Range(0, 10)]
-        [SerializeField] private int _outlineWidth = 1;
+        [SerializeField] private int outlineWidth = 1;
         [Tooltip("Threshold to determine sprite borders."), Range(0f, 1f)]
-        [SerializeField] private float _alphaThreshold = .01f;
+        [SerializeField] private float alphaThreshold = .01f;
         [Tooltip("Whether the outline should only be drawn outside of the sprite borders. Make sure sprite texture has sufficient transparent space for the required outline width.")]
-        [SerializeField] private bool _drawOutside = false;
+        [SerializeField] private bool drawOutside = false;
         [Tooltip("Whether to enable GPU instancing.")]
-        [SerializeField] private bool _enableInstancing = false;
+        [SerializeField] private bool enableInstancing = false;
 
         private MaterialPropertyBlock materialProperties;
         private int isOutlineEnabledId;

@@ -90,7 +90,7 @@ LightmapSettings:
     m_PVRFilteringAtrousPositionSigmaAO: 1
     m_ShowResolutionOverlay: 1
   m_LightingDataAsset: {fileID: 0}
-  m_UseShadowmask: 0
+  m_UseShadowmask: 1
 --- !u!196 &4
 NavMeshSettings:
   serializedVersion: 2
@@ -350,12 +350,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _glowColor: {r: 0.19852942, g: 1, b: 0.96683556, a: 1}
-  _glowBrightness: 2.5
-  _outlineWidth: 1
-  _alphaThreshold: 0.01
-  _drawOutside: 0
-  _enableInstancing: 0
+  glowColor: {r: 0, g: 1, b: 0.9568691, a: 1}
+  glowBrightness: 2.53
+  outlineWidth: 1
+  alphaThreshold: 0.01
+  drawOutside: 0
+  enableInstancing: 0
 --- !u!212 &1399752586
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -442,12 +442,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8f6d3c6e4250e84192f5b34ce9e71bc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _glowColor: {r: 1, g: 0.25735295, b: 0.25735295, a: 1}
-  _glowBrightness: 2
-  _outlineWidth: 1
-  _alphaThreshold: 0.01
-  _drawOutside: 0
-  _enableInstancing: 0
+  glowColor: {r: 1, g: 1, b: 1, a: 1}
+  glowBrightness: 2
+  outlineWidth: 1
+  alphaThreshold: 0.01
+  drawOutside: 0
+  enableInstancing: 0
 --- !u!212 &1923373391
 SpriteRenderer:
   m_ObjectHideFlags: 0
