@@ -55,19 +55,16 @@ namespace SpriteGlow
         [Tooltip("Whether to enable GPU instancing.")]
         [SerializeField] private bool enableInstancing = false;
 
+        private static readonly int isOutlineEnabledId = Shader.PropertyToID("_IsOutlineEnabled");
+        private static readonly int outlineColorId = Shader.PropertyToID("_OutlineColor");
+        private static readonly int outlineSizeId = Shader.PropertyToID("_OutlineSize");
+        private static readonly int alphaThresholdId = Shader.PropertyToID("_AlphaThreshold");
+
         private MaterialPropertyBlock materialProperties;
-        private int isOutlineEnabledId;
-        private int outlineColorId;
-        private int outlineSizeId;
-        private int alphaThresholdId;
 
         private void Awake ()
         {
             Renderer = GetComponent<SpriteRenderer>();
-            isOutlineEnabledId = Shader.PropertyToID("_IsOutlineEnabled");
-            outlineColorId = Shader.PropertyToID("_OutlineColor");
-            outlineSizeId = Shader.PropertyToID("_OutlineSize");
-            alphaThresholdId = Shader.PropertyToID("_AlphaThreshold");
         }
 
         private void OnEnable ()
@@ -82,6 +79,8 @@ namespace SpriteGlow
 
         private void OnValidate ()
         {
+            if (!isActiveAndEnabled) return;
+
             // Update material properties when changing serialized fields with editor GUI.
             SetMaterialProperties();
         }
@@ -98,7 +97,7 @@ namespace SpriteGlow
 
             Renderer.sharedMaterial = SpriteGlowMaterial.GetSharedFor(this);
 
-            if (materialProperties == null)
+            if (materialProperties == null) // Initializing it at `Awake` or `OnEnable` causes nullref in editor in some cases.
                 materialProperties = new MaterialPropertyBlock();
 
             materialProperties.SetFloat(isOutlineEnabledId, isActiveAndEnabled ? 1 : 0);
