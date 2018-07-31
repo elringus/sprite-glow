@@ -14,74 +14,32 @@ namespace SpriteGlow
         public Color GlowColor
         {
             get { return glowColor; }
-            set
-            {
-                if (glowColor != value)
-                {
-                    glowColor = value;
-                    SetMaterialProperties();
-                }
-            }
+            set { if (glowColor != value) { glowColor = value; SetMaterialProperties(); } }
         }
         public float GlowBrightness
         {
             get { return glowBrightness; }
-            set
-            {
-                if (glowBrightness != value)
-                {
-                    glowBrightness = value;
-                    SetMaterialProperties();
-                }
-            }
+            set { if (glowBrightness != value) { glowBrightness = value; SetMaterialProperties(); } }
         }
         public int OutlineWidth
         {
             get { return outlineWidth; }
-            set
-            {
-                if (outlineWidth != value)
-                {
-                    outlineWidth = value;
-                    SetMaterialProperties();
-                }
-            }
+            set { if (outlineWidth != value) { outlineWidth = value; SetMaterialProperties(); } }
         }
         public float AlphaThreshold
         {
             get { return alphaThreshold; }
-            set
-            {
-                if (alphaThreshold != value)
-                {
-                    alphaThreshold = value;
-                    SetMaterialProperties();
-                }
-            }
+            set { if (alphaThreshold != value) { alphaThreshold = value; SetMaterialProperties(); } }
         }
         public bool DrawOutside
         {
             get { return drawOutside; }
-            set
-            {
-                if (drawOutside != value)
-                {
-                    drawOutside = value;
-                    SetMaterialProperties();
-                }
-            }
+            set { if (drawOutside != value) { drawOutside = value; SetMaterialProperties(); } }
         }
         public bool EnableInstancing
         {
             get { return enableInstancing; }
-            set
-            {
-                if (enableInstancing != value)
-                {
-                    enableInstancing = value;
-                    SetMaterialProperties();
-                }
-            }
+            set { if (enableInstancing != value) { enableInstancing = value; SetMaterialProperties(); } }
         }
 
         [Tooltip("Base color of the glow.")]
