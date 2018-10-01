@@ -230,7 +230,7 @@ Shader "Sprites/Outline"
                 int shouldDrawOutline = ShouldDrawOutlineInside(color, vertexOutput.TexCoord, isOutlineEnabled, outlineSize, alphaThreshold);
                 #endif
 
-                color = lerp(color, outlineColor * outlineColor.a, shouldDrawOutline);
+                color.rgb = lerp(color.rgb, outlineColor.rgb * outlineColor.a, shouldDrawOutline);
 
                 return color;
             }
