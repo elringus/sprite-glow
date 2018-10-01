@@ -1,5 +1,5 @@
 ## Download unitypackage
-For Unity 2017.3 and later: [SpriteGlow.unitypackage](https://github.com/Elringus/SpriteGlow/releases/download/v1.5-release/SpriteGlow.unitypackage). Check [releases](https://github.com/Elringus/SpriteGlow/releases) for previous versions support.
+For Unity 2017.3 and later: [SpriteGlow.unitypackage](https://github.com/Elringus/SpriteGlow/releases/download/v1.6-release/SpriteGlow.unitypackage). Check [releases](https://github.com/Elringus/SpriteGlow/releases) for previous versions support.
 
 ## Description
 The glow effect is achieved using sprite outline in HDR colors (applied via shader) and bloom post-processing.
