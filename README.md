@@ -23,7 +23,7 @@ Not directly (after all, this is **Sprite**Glow), but it's possible if the compo
 ### Why the glow doesn't appear?
 Make sure:
 
-* A bloom post-processing effect is enabled (you can use any, eg [Unity Post Processing Stack](https://docs.unity3d.com/Manual/PostProcessing-Bloom.html))
+* A bloom post-processing effect is enabled (you can use any, eg [the one from Unity's PPS](https://docs.unity3d.com/Manual/PostProcessing-Bloom.html))
 
 * HDR is enabled for target platform and tier (Edit > Project Settings > Graphics):
 
