@@ -17,7 +17,8 @@ Character sprite by [Mikhail Pigichka](https://www.facebook.com/hundewache).
 
 ### Can I use the effect with components other than SpriteRenderer (UI Image, Tilemap, etc)?
 
-The effect with components other than SpriteRenderer (UI Image, Tilemap, etc) cannot be used directly (after all, this project is called **Sprite**Glow). It is only possible if the component is using a shader similar to sprites, e.g. UI objects, tilemaps, “2D” stuff, etc. To accomplish this, a material based on the `Sprites/Outline` shader must be created and manually applied to the component. This will allow control over all of the glow parameters using the material editor. In the project, scenes with examples of applying the effect to UI Button or a tilemap can be found. 
+Not directly (after all, this project is called **Sprite**Glow). It is only possible if the component is using a shader similar to sprites, e.g. , “2D” stuff such as UI objects, tilemaps, etc. To accomplish this, a material based on the `Sprites/Outline` shader must be created and manually applied to the component. Material editor can then be used to control all of the glow parameters. In the project, scenes with examples of applying the effect to UI Button or a tilemap can be found. 
+
 
 ![](https://i.gyazo.com/6c92f315d8a25600bf4ec930c5b7de3e.png)
 
@@ -45,7 +46,7 @@ Make sure 'Threshold' value of the bloom image effect is set high enough. It's u
 
 ### Why I get a NullReferenceException in build?
 
-NullReferenceException in build is likely due to the outline shader not being included to the build. This often happens when none of the included assets reference SpriteGlow component directly. The shader can be force-included by assigning it to the "Always Included Shaders" in Edit -> Project Settings -> Graphics.
+NullReferenceException error in build is likely due to the outline shader not being included to the build. This often happens when none of the included assets reference SpriteGlow component directly. The shader can be force-included by assigning it to the "Always Included Shaders" in Edit -> Project Settings -> Graphics.
 
 ### It's still not working
 Please check the active [issues](https://github.com/Elringus/SpriteGlow/issues).
