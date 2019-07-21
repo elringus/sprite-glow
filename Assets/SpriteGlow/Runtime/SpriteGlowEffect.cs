@@ -13,32 +13,32 @@ namespace SpriteGlow
         public SpriteRenderer Renderer { get; private set; }
         public Color GlowColor
         {
-            get { return glowColor; }
+            get => glowColor; 
             set { if (glowColor != value) { glowColor = value; SetMaterialProperties(); } }
         }
         public float GlowBrightness
         {
-            get { return glowBrightness; }
+            get => glowBrightness; 
             set { if (glowBrightness != value) { glowBrightness = value; SetMaterialProperties(); } }
         }
         public int OutlineWidth
         {
-            get { return outlineWidth; }
+            get => outlineWidth; 
             set { if (outlineWidth != value) { outlineWidth = value; SetMaterialProperties(); } }
         }
         public float AlphaThreshold
         {
-            get { return alphaThreshold; }
+            get => alphaThreshold;
             set { if (alphaThreshold != value) { alphaThreshold = value; SetMaterialProperties(); } }
         }
         public bool DrawOutside
         {
-            get { return drawOutside; }
+            get => drawOutside;
             set { if (drawOutside != value) { drawOutside = value; SetMaterialProperties(); } }
         }
         public bool EnableInstancing
         {
-            get { return enableInstancing; }
+            get => enableInstancing;
             set { if (enableInstancing != value) { enableInstancing = value; SetMaterialProperties(); } }
         }
 

@@ -5,20 +5,20 @@ namespace SpriteGlow
 {
     public class SpriteGlowMaterial : Material
     {
-        public Texture SpriteTexture { get { return mainTexture; } }
-        public bool DrawOutside { get { return IsKeywordEnabled(outsideMaterialKeyword); } }
-        public bool InstancingEnabled { get { return enableInstancing; } }
+        public Texture SpriteTexture => mainTexture;
+        public bool DrawOutside => IsKeywordEnabled(outsideMaterialKeyword); 
+        public bool InstancingEnabled => enableInstancing;
 
         private const string outlineShaderName = "Sprites/Outline";
         private const string outsideMaterialKeyword = "SPRITE_OUTLINE_OUTSIDE";
-        private static readonly Shader outlineShader = Shader.Find(outlineShaderName);
 
-        private static List<SpriteGlowMaterial> sharedMaterials = new List<SpriteGlowMaterial>();
+        private static readonly Shader outlineShader = Shader.Find(outlineShaderName);
+        private static readonly List<SpriteGlowMaterial> sharedMaterials = new List<SpriteGlowMaterial>();
 
         public SpriteGlowMaterial (Texture spriteTexture, bool drawOutside = false, bool instancingEnabled = false)
             : base(outlineShader)
         {
-            if (!outlineShader) Debug.LogError(string.Format("{0} shader not found. Make sure the shader is included to the build.", outlineShaderName));
+            if (!outlineShader) Debug.LogError($"`{outlineShaderName}` shader not found. Make sure the shader is included to the build.");
 
             mainTexture = spriteTexture;
             if (drawOutside) EnableKeyword(outsideMaterialKeyword);
