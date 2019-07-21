@@ -1,5 +1,5 @@
 ## Installation
-Either download and import a [standalone Unity package](https://github.com/Elringus/SpriteGlow/releases/download/v1.7/SpriteGlow.unitypackage) or add `"com.elringus.spriteglow": "https://github.com/Elringus/SpriteGlow.git#package"` as a dependency for your project's `Packages/manifest.json` ([guide](https://docs.unity3d.com/Manual/upm-git.html)).
+Either download and import a [standalone Unity package](https://github.com/Elringus/SpriteGlow/releases/download/v1.7-release/SpriteGlow.unitypackage) or add `"com.elringus.spriteglow": "https://github.com/Elringus/SpriteGlow.git#package"` as a dependency for your project's `Packages/manifest.json` ([guide](https://docs.unity3d.com/Manual/upm-git.html)).
 
 ## Description
 The glow effect is achieved using sprite outline in HDR colors (applied via shader) and bloom post-processing.
