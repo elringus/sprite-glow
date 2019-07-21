@@ -1,0 +1,11 @@
+{
+  "name": "com.elringus.spriteglow",
+  "version": "1.7.0",
+  "displayName": "SpriteGlow",
+  "description": "A sprite glow effect for Unity game engine",
+  "unity": "2019.1",
+  "author": {
+    "name": "Elringus",
+    "url": "https://elringus.me"
+  } 
+}
