@@ -45,7 +45,7 @@ Shader "Sprites/Outline"
             #pragma fragment ComputeFragment
             #pragma target 2.0
             #pragma multi_compile_instancing
-            #pragma multi_compile _ PIXELSNAP_ON
+            #pragma multi_compile_local _ PIXELSNAP_ON
             #pragma multi_compile _ ETC1_EXTERNAL_ALPHA
             #pragma multi_compile _ SPRITE_OUTLINE_OUTSIDE
 
@@ -54,6 +54,7 @@ Shader "Sprites/Outline"
             #endif
 
             #ifdef UNITY_INSTANCING_ENABLED
+
             UNITY_INSTANCING_BUFFER_START(PerDrawSprite)
             UNITY_DEFINE_INSTANCED_PROP(fixed4, unity_SpriteRendererColorArray)
             UNITY_DEFINE_INSTANCED_PROP(fixed2, unity_SpriteFlipArray)
@@ -62,11 +63,16 @@ Shader "Sprites/Outline"
             #define _Flip UNITY_ACCESS_INSTANCED_PROP(PerDrawSprite, unity_SpriteFlipArray)
 
             UNITY_INSTANCING_BUFFER_START(PerDrawSpriteOutline)
-            UNITY_DEFINE_INSTANCED_PROP(float,  _IsOutlineEnabled)
-            UNITY_DEFINE_INSTANCED_PROP(fixed4, _OutlineColor)
-            UNITY_DEFINE_INSTANCED_PROP(float,  _OutlineSize)
-            UNITY_DEFINE_INSTANCED_PROP(float,  _AlphaThreshold)
+            UNITY_DEFINE_INSTANCED_PROP(float,  _IsOutlineEnabledArray)
+            UNITY_DEFINE_INSTANCED_PROP(fixed4, _OutlineColorArray)
+            UNITY_DEFINE_INSTANCED_PROP(float,  _OutlineSizeArray)
+            UNITY_DEFINE_INSTANCED_PROP(float,  _AlphaThresholdArray)
             UNITY_INSTANCING_BUFFER_END(PerDrawSpriteOutline)
+            #define _IsOutlineEnabled UNITY_ACCESS_INSTANCED_PROP(PerDrawSpriteOutline, _IsOutlineEnabledArray)
+            #define _OutlineColor UNITY_ACCESS_INSTANCED_PROP(PerDrawSpriteOutline, _OutlineColorArray)
+            #define _OutlineSize UNITY_ACCESS_INSTANCED_PROP(PerDrawSpriteOutline, _OutlineSizeArray)
+            #define _AlphaThreshold UNITY_ACCESS_INSTANCED_PROP(PerDrawSpriteOutline, _AlphaThresholdArray)
+
             #endif 
 
             CBUFFER_START(UnityPerDrawSprite)
@@ -101,22 +107,22 @@ Shader "Sprites/Outline"
                 float4 Vertex : SV_POSITION;
                 fixed4 Color : COLOR;
                 float2 TexCoord : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
                 UNITY_VERTEX_OUTPUT_STEREO
             };
+
+            inline float4 UnityFlipSprite(in float3 pos, in fixed2 flip)
+            {
+                return float4(pos.xy * flip, pos.z, 1.0);
+            }
 
             VertexOutput ComputeVertex(VertexInput vertexInput)
             {
                 VertexOutput vertexOutput;
 
                 UNITY_SETUP_INSTANCE_ID(vertexInput);
-                UNITY_TRANSFER_INSTANCE_ID(vertexInput, vertexOutput);
                 UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(vertexOutput);
 
-                #ifdef UNITY_INSTANCING_ENABLED
-                vertexInput.Vertex.xy *= _Flip;
-                #endif
-
+                vertexOutput.Vertex = UnityFlipSprite(vertexInput.Vertex, _Flip);
                 vertexOutput.Vertex = UnityObjectToClipPos(vertexInput.Vertex);
                 vertexOutput.TexCoord = vertexInput.TexCoord;
                 vertexOutput.Color = vertexInput.Color * _Color * _RendererColor;
@@ -214,23 +220,16 @@ Shader "Sprites/Outline"
 
             fixed4 ComputeFragment(VertexOutput vertexOutput) : SV_Target
             {
-                UNITY_SETUP_INSTANCE_ID(vertexOutput);
-
                 fixed4 color = SampleSpriteTexture(vertexOutput.TexCoord) * vertexOutput.Color;
                 color.rgb *= color.a;
 
-                int isOutlineEnabled = UNITY_ACCESS_INSTANCED_PROP(PerDrawSpriteOutline, _IsOutlineEnabled);
-                fixed4 outlineColor = UNITY_ACCESS_INSTANCED_PROP(PerDrawSpriteOutline, _OutlineColor);
-                int outlineSize = UNITY_ACCESS_INSTANCED_PROP(PerDrawSpriteOutline, _OutlineSize);
-                float alphaThreshold = UNITY_ACCESS_INSTANCED_PROP(PerDrawSpriteOutline, _AlphaThreshold);
-
                 #ifdef SPRITE_OUTLINE_OUTSIDE
-                int shouldDrawOutline = ShouldDrawOutlineOutside(color, vertexOutput.TexCoord, isOutlineEnabled, outlineSize, alphaThreshold);
+                int shouldDrawOutline = ShouldDrawOutlineOutside(color, vertexOutput.TexCoord, _IsOutlineEnabled, _OutlineSize, _AlphaThreshold);
                 #else
-                int shouldDrawOutline = ShouldDrawOutlineInside(color, vertexOutput.TexCoord, isOutlineEnabled, outlineSize, alphaThreshold);
+                int shouldDrawOutline = ShouldDrawOutlineInside(color, vertexOutput.TexCoord, _IsOutlineEnabled, _OutlineSize, _AlphaThreshold);
                 #endif
 
-                color.rgb = lerp(color.rgb, outlineColor.rgb * outlineColor.a, shouldDrawOutline);
+                color.rgb = lerp(color.rgb, _OutlineColor.rgb * _OutlineColor.a, shouldDrawOutline);
 
                 return color;
             }
