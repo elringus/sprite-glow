@@ -10,12 +10,19 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: bf2edee5c58d82540a51f03df9d42094, type: 3}
-  m_Name: LightweightSRP
+  m_Name: URP
   m_EditorClassIdentifier: 
-  k_AssetVersion: 4
+  k_AssetVersion: 5
+  k_AssetPreviousVersion: 5
+  m_RendererType: 1
+  m_RendererData: {fileID: 0}
+  m_RendererDataList:
+  - {fileID: 11400000, guid: de127b3e0f6570b4196fd9748fe2a39f, type: 2}
+  m_DefaultRendererIndex: 0
   m_RequireDepthTexture: 0
   m_RequireOpaqueTexture: 0
   m_OpaqueDownsampling: 1
+  m_SupportsTerrainHoles: 1
   m_SupportsHDR: 1
   m_MSAA: 1
   m_RenderScale: 1
@@ -24,21 +31,24 @@ MonoBehaviour:
   m_MainLightShadowmapResolution: 2048
   m_AdditionalLightsRenderingMode: 1
   m_AdditionalLightsPerObjectLimit: 4
-  m_AdditionalLightShadowsSupported: 1
+  m_AdditionalLightShadowsSupported: 0
   m_AdditionalLightsShadowmapResolution: 512
   m_ShadowDistance: 50
-  m_ShadowCascades: 2
+  m_ShadowCascades: 0
   m_Cascade2Split: 0.25
   m_Cascade4Split: {x: 0.067, y: 0.2, z: 0.467}
   m_ShadowDepthBias: 1
   m_ShadowNormalBias: 1
   m_SoftShadowsSupported: 0
+  m_UseSRPBatcher: 1
   m_SupportsDynamicBatching: 1
   m_MixedLightingSupported: 1
+  m_DebugLevel: 0
+  m_ColorGradingMode: 1
+  m_ColorGradingLutSize: 32
   m_ShadowType: 1
-  m_LocalShadowsSupported: 1
-  m_LocalShadowsAtlasResolution: 512
-  m_MaxPixelLights: 4
-  m_ShadowAtlasResolution: 2048
-  m_ResourcesAsset: {fileID: 11400000, guid: aac5a08c32552a14c89394b703f1978a, type: 2}
+  m_LocalShadowsSupported: 0
+  m_LocalShadowsAtlasResolution: 256
+  m_MaxPixelLights: 0
+  m_ShadowAtlasResolution: 256
   m_ShaderVariantLogLevel: 0
