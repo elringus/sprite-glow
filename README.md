@@ -1,5 +1,7 @@
 ## Installation
-Either download and import a [standalone Unity package](https://github.com/Elringus/SpriteGlow/releases/download/v1.7-release/SpriteGlow.unitypackage) or add `"com.elringus.spriteglow": "https://github.com/Elringus/SpriteGlow.git#package"` as a dependency for your project's `Packages/manifest.json` ([guide](https://docs.unity3d.com/Manual/upm-git.html)).
+Use [Unity Package Manager (UPM)](https://docs.unity3d.com/Manual/upm-ui.html) window to install the package via the following git URL: `https://github.com/Elringus/SpriteGlow.git#package`.
+
+![](https://i.gyazo.com/b54e9daa9a483d9bf7f74f0e94b2d38a.gif)
 
 ## Description
 The glow effect is achieved using sprite outline in HDR colors (applied via shader) and bloom post-processing.
@@ -7,9 +9,9 @@ The glow effect is achieved using sprite outline in HDR colors (applied via shad
 ![Glow Intensity](https://i.gyazo.com/698f7d444d334b41657f056fb1ac94c7.gif) 
 ![Glow Color](https://i.gyazo.com/c8f8ec8a276aa4781b52732c521691db.gif)
 
-For the bloom effect [Unity Post Processing Stack](https://github.com/Unity-Technologies/PostProcessing) is used. You can replace it with similar 3rd-party solutions.
+For the bloom effect [Unity Post Processing Stack (PPS)](https://github.com/Unity-Technologies/PostProcessing) is used. You can replace it with similar 3rd-party solutions.
 
-The effect is compatible with the [Lightweight Render Pipeline](https://github.com/Unity-Technologies/ScriptableRenderPipeline/wiki/Lightweight-Render-Pipeline) (HDR should be enabled in the pipeline asset settings).
+The effect is compatible with the [Universal Render Pipeline (URP, aka LWRP)](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest). Bloom should be configured via [URP's own post-processing solution](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/integration-with-post-processing.html); don't forget to enable HDR in the pipeline asset settings.
 
 Character sprite by [Mikhail Pigichka](https://www.facebook.com/hundewache).
 
