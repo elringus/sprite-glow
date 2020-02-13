@@ -26,7 +26,7 @@ Not directly (after all, this is **Sprite**Glow), but it's possible if the compo
 
 Make sure:
 
-* A bloom post-processing effect is enabled (you can use any, eg [the one from Unity's PPS](https://docs.unity3d.com/Manual/PostProcessing-Bloom.html)). Be aware, that **universal render pipeline (URP/LWRP) only supports [built-in post-processing](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/integration-with-post-processing.html), third-party solutions (including PPS) won't work with it**.
+* A bloom post-processing effect is enabled (you can use any, eg [the one from Unity's PPS](https://docs.unity3d.com/Manual/PostProcessing-Bloom.html)). Be aware, that **universal render pipeline (URP/LWRP) only supports [built-in post-processing](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/integration-with-post-processing.html)**, third-party solutions (including PPS) won't work with it.
 
 * HDR is enabled for target platform and tier (Edit > Project Settings > Graphics):
 
