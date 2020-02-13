@@ -39,6 +39,8 @@ Make sure:
 
 ![](https://i.gyazo.com/94fe6e143e310a526b3428c6c62b45bf.png)
 
+* If you're using a universal render pipeline (URP/LWRP), [setup post-processing via URP settings](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/integration-with-post-processing.html) instead of using PPS or other third-party solutions. 
+
 ### Why the glow appears on the whole image?
 Make sure 'Threshold' value of the bloom image effect is set high enough. It's usually 1 to 1.5, depending on the bloom solution.
 
