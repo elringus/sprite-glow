@@ -23,7 +23,8 @@ Not directly (after all, this is **Sprite**Glow), but it's possible if the compo
 ![](https://i.gyazo.com/6c92f315d8a25600bf4ec930c5b7de3e.png)
 
 ### Why the glow doesn't appear?
-Make sure:
+
+**If you're using a universal render pipeline (URP/LWRP), [setup post-processing via URP settings](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/integration-with-post-processing.html) instead of using PPS or other third-party solutions**, otherwise make sure:
 
 * A bloom post-processing effect is enabled (you can use any, eg [the one from Unity's PPS](https://docs.unity3d.com/Manual/PostProcessing-Bloom.html))
 
@@ -38,8 +39,6 @@ Make sure:
 * You've set 'Glow Brightness' high enough:
 
 ![](https://i.gyazo.com/94fe6e143e310a526b3428c6c62b45bf.png)
-
-**If you're using a universal render pipeline (URP/LWRP), [setup post-processing via URP settings](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@7.1/manual/integration-with-post-processing.html) instead of using PPS or other third-party solutions.** 
 
 ### Why the glow appears on the whole image?
 Make sure 'Threshold' value of the bloom image effect is set high enough. It's usually 1 to 1.5, depending on the bloom solution.
