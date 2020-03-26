@@ -29,7 +29,6 @@ sysinfo.txt
 
 # Builds
 *.apk
-*.unitypackage
 
 # =========================
 # Operating System Files

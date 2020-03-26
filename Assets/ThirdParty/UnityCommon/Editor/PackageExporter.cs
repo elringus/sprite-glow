@@ -34,6 +34,8 @@ namespace UnityCommon
         private static bool PublishToGit { get { return PlayerPrefs.GetInt(prefsPrefix + "PublishToGit", 0) == 1; } set { PlayerPrefs.SetInt(prefsPrefix + "PublishToGit", value ? 1 : 0); } }
         private static string GitShellPath { get { return PlayerPrefs.GetString(prefsPrefix + "GitShellPath"); } set { PlayerPrefs.SetString(prefsPrefix + "GitShellPath", value); } }
         private static string GitScriptPath { get { return PlayerPrefs.GetString(prefsPrefix + "GitScriptPath"); } set { PlayerPrefs.SetString(prefsPrefix + "GitScriptPath", value); } }
+        private static bool ApplyModificationsToGit { get { return PlayerPrefs.GetInt(prefsPrefix + "ApplyModificationsToGit", 0) == 1; } set { PlayerPrefs.SetInt(prefsPrefix + "ApplyModificationsToGit", value ? 1 : 0); } }
+        private static string OverrideNamespace { get { return PlayerPrefs.GetString(prefsPrefix + "OverrideNamespace"); } set { PlayerPrefs.SetString(prefsPrefix + "OverrideNamespace", value); } }
 
         private const string prefsPrefix = "PackageExporter.";
         private const string autoRefreshKey = "kAutoRefresh";
@@ -65,7 +67,7 @@ namespace UnityCommon
             RenderGUI();
         }
 
-#if UNITY_2019_1_OR_NEWER
+        #if UNITY_2019_1_OR_NEWER
         [SettingsProvider]
         internal static SettingsProvider CreateProjectSettingsProvider ()
         {
@@ -74,7 +76,7 @@ namespace UnityCommon
             provider.guiHandler += id => RenderGUI();
             return provider;
         }
-#elif UNITY_2018_3_OR_NEWER
+        #elif UNITY_2018_3_OR_NEWER
         [SettingsProvider]
         internal static SettingsProvider CreateProjectSettingsProvider ()
         {
@@ -83,14 +85,14 @@ namespace UnityCommon
             provider.guiHandler += id => RenderGUI();
             return provider;
         }
-#else
+        #else
         [MenuItem("Edit/Project Settings/Package Exporter")]
         private static void OpenSettingsWindow ()
         {
             var window = GetWindow<PackageExporter>();
             window.Show();
         }
-#endif
+        #endif
 
         private static void Initialize ()
         {
@@ -115,6 +117,7 @@ namespace UnityCommon
             EditorGUILayout.Space();
             PackageName = EditorGUILayout.TextField("Package Name", PackageName);
             Copyright = EditorGUILayout.TextField("Copyright Notice", Copyright);
+            OverrideNamespace = EditorGUILayout.TextField("Override Namespace", OverrideNamespace);
             LicenseFilePath = EditorGUILayout.TextField("License File Path", LicenseFilePath);
             using (new EditorGUILayout.HorizontalScope())
             {
@@ -138,6 +141,7 @@ namespace UnityCommon
                     if (GUILayout.Button("Select", EditorStyles.miniButton, GUILayout.Width(65)))
                         GitScriptPath = EditorUtility.OpenFilePanelWithFilters("Git Script Path", "", new[] { "Shell", "sh" });
                 }
+                ApplyModificationsToGit = EditorGUILayout.Toggle("Apply Modifications To Git", ApplyModificationsToGit);
             }
             EditorGUILayout.Space();
 
@@ -220,27 +224,39 @@ namespace UnityCommon
                 AssetDatabase.ImportAsset(LicenseAssetPath, ImportAssetOptions.ForceSynchronousImport);
             }
 
+            // Publish GitHub branch before modifications.
+            if (!ApplyModificationsToGit && PublishToGit)
+            {
+                using (var proccess = System.Diagnostics.Process.Start(GitShellPath, $"\"{GitScriptPath}\""))
+                {
+                    proccess.WaitForExit();
+                }
+            }
+
             // Modify scripts (namespace and copyright).
             DisplayProgressBar("Modifying scripts...", .25f);
             modifiedScripts.Clear();
-            var needToModify = !string.IsNullOrEmpty(Copyright);
+            var needToModify = !string.IsNullOrEmpty(Copyright) || !string.IsNullOrEmpty(OverrideNamespace);
             if (needToModify)
             {
                 foreach (var path in unignoredPaths)
                 {
                     if (!path.EndsWith(".cs") && !path.EndsWith(".shader") && !path.EndsWith(".cginc")) continue;
+                    if (path.Contains("ThirdParty")) continue;
 
                     var fullpath = Application.dataPath.Replace("Assets", string.Empty) + path;
                     var originalScriptText = File.ReadAllText(fullpath, Encoding.UTF8);
 
                     string scriptText = string.Empty;
-                    var isImportedScript = path.Contains("ThirdParty");
 
-                    var copyright = isImportedScript || string.IsNullOrEmpty(Copyright) ? string.Empty : "// " + Copyright;
-                    if (!string.IsNullOrEmpty(copyright) && !isImportedScript)
-                        scriptText += copyright + "\r\n\r\n";
+                    var copyright = string.IsNullOrEmpty(Copyright) ? string.Empty : "// " + Copyright;
+                    if (!string.IsNullOrEmpty(copyright))
+                        scriptText += copyright + Environment.NewLine + Environment.NewLine;
 
                     scriptText += originalScriptText;
+
+                    if (!string.IsNullOrEmpty(OverrideNamespace))
+                        scriptText = scriptText.Replace($"namespace {PackageName}{Environment.NewLine}{{", $"namespace {OverrideNamespace}{Environment.NewLine}{{");
 
                     File.WriteAllText(fullpath, scriptText, Encoding.UTF8);
 
@@ -278,8 +294,8 @@ namespace UnityCommon
                 catch (Exception e) { Debug.LogError(e.Message); }
             }
 
-            // Publish GitHub branch.
-            if (PublishToGit)
+            // Publish GitHub branch after modifications.
+            if (ApplyModificationsToGit && PublishToGit)
             {
                 using (var proccess = System.Diagnostics.Process.Start(GitShellPath, $"\"{GitScriptPath}\""))
                 {
