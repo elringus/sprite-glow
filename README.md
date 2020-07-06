@@ -22,7 +22,7 @@ Not directly (after all, this is **Sprite**Glow), but it's possible if the compo
 
 ![](https://i.gyazo.com/6c92f315d8a25600bf4ec930c5b7de3e.png)
 
-### Why the glow doesn't appear?
+### Why doesn't my sprite glow?
 
 Make sure:
 
@@ -40,12 +40,12 @@ Make sure:
 
 ![](https://i.gyazo.com/94fe6e143e310a526b3428c6c62b45bf.png)
 
-### Why the glow appears on the whole image?
+### Why dosen't the glow appears on the whole image?
 Make sure 'Threshold' value of the bloom image effect is set high enough. It's usually 1 to 1.5, depending on the bloom solution.
 
 ![](https://i.gyazo.com/bd3961f0efbceddca9c4a077d7b9a6d4.png)
 
-### Why I get a NullReferenceException in build?
+### Why do I get a NullReferenceException in build?
 Most likely the outline shader is not included to the build (it happens when none of the included assets reference SpriteGlow component directly). You can force-include the shader by assigning it to the "Always Included Shaders" in Edit -> Project Settings -> Graphics.
 
 ### It's still not working
