@@ -22,7 +22,7 @@ Not directly (after all, this is **Sprite**Glow), but it's possible if the compo
 
 ![](https://i.gyazo.com/6c92f315d8a25600bf4ec930c5b7de3e.png)
 
-### Why doesn't my sprite glow?
+### Why doesn't the glow appear?
 
 Make sure:
 
@@ -40,7 +40,7 @@ Make sure:
 
 ![](https://i.gyazo.com/94fe6e143e310a526b3428c6c62b45bf.png)
 
-### Why dosen't the glow appears on the whole image?
+### Why dosen't the glow appear on the whole image?
 Make sure 'Threshold' value of the bloom image effect is set high enough. It's usually 1 to 1.5, depending on the bloom solution.
 
 ![](https://i.gyazo.com/bd3961f0efbceddca9c4a077d7b9a6d4.png)
