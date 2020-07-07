@@ -40,7 +40,7 @@ Make sure:
 
 ![](https://i.gyazo.com/94fe6e143e310a526b3428c6c62b45bf.png)
 
-### Why dosen't the glow appear on the whole image?
+### Why does the glow appear on the whole image?
 Make sure 'Threshold' value of the bloom image effect is set high enough. It's usually 1 to 1.5, depending on the bloom solution.
 
 ![](https://i.gyazo.com/bd3961f0efbceddca9c4a077d7b9a6d4.png)
