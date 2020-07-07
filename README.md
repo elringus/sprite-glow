@@ -48,7 +48,7 @@ Make sure 'Threshold' value of the bloom image effect is set high enough. It's u
 ### Why do I get a NullReferenceException in build?
 Most likely the outline shader is not included to the build (it happens when none of the included assets reference SpriteGlow component directly). You can force-include the shader by assigning it to the "Always Included Shaders" in Edit -> Project Settings -> Graphics.
 
-### It's still not working
+### It's still not working!
 Make sure you're using a compatible Unity version; supported versions per release are available on the [releases page](https://github.com/Elringus/SpriteGlow/releases).
 
 Download (clone) this repository and examine the example scenes, comparing them with your setup. Chances are, you've misconfigured something.
