@@ -1,10 +1,7 @@
-﻿using SpriteGlow;
-using System.Collections;
+﻿using System.Collections;
+using SpriteGlow;
 using UnityEngine;
 
-/// <summary>
-/// Used to test SpriteGlow functionality at runtime.
-/// </summary>
 public class TestSpriteGlowBehaviour : MonoBehaviour
 {
     private IEnumerator Start ()

@@ -138,7 +138,7 @@ Shader "Sprites/Outline"
             // Will return 1 when the test is positive (should draw outline), 0 otherwise.
             int ShouldDrawOutlineInside (fixed4 sampledColor, float2 texCoord, int isOutlineEnabled, int outlineSize, float alphaThreshold)
             {
-                // Won't draw if effect is disabled, outline size is zero or sampled fragment is tranpsarent.
+                // Won't draw if effect is disabled, outline size is zero or sampled fragment is transparent.
                 if (isOutlineEnabled * outlineSize * sampledColor.a == 0) return 0;
 
                 float2 texDdx = ddx(texCoord);
@@ -181,7 +181,7 @@ Shader "Sprites/Outline"
                 float2 texDdx = ddx(texCoord);
                 float2 texDdy = ddy(texCoord);
 
-                // Looking for an opaque pixel (sprite border from outise) around computed fragment with given depth (_OutlineSize).
+                // Looking for an opaque pixel (sprite border from outside) around computed fragment with given depth (_OutlineSize).
                 for (int i = 1; i <= SAMPLE_DEPTH_LIMIT; i++)
                 {
                     float2 pixelUpTexCoord = texCoord + float2(0, i * _MainTex_TexelSize.y);

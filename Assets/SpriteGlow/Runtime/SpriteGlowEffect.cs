@@ -1,46 +1,23 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace SpriteGlow
 {
     /// <summary>
     /// Adds an HDR outline over the <see cref="SpriteRenderer"/>'s sprite borders.
-    /// Can be used in conjuction with bloom post-processing to create a glow effect.
+    /// Can be used in conjunction with bloom post-processing to create a glow effect.
     /// </summary>
     [AddComponentMenu("Effects/Sprite Glow")]
     [RequireComponent(typeof(SpriteRenderer)), DisallowMultipleComponent, ExecuteInEditMode]
     public class SpriteGlowEffect : MonoBehaviour
     {
         public SpriteRenderer Renderer { get; private set; }
-        public Color GlowColor
-        {
-            get => glowColor; 
-            set { if (glowColor != value) { glowColor = value; SetMaterialProperties(); } }
-        }
-        public float GlowBrightness
-        {
-            get => glowBrightness; 
-            set { if (glowBrightness != value) { glowBrightness = value; SetMaterialProperties(); } }
-        }
-        public int OutlineWidth
-        {
-            get => outlineWidth; 
-            set { if (outlineWidth != value) { outlineWidth = value; SetMaterialProperties(); } }
-        }
-        public float AlphaThreshold
-        {
-            get => alphaThreshold;
-            set { if (alphaThreshold != value) { alphaThreshold = value; SetMaterialProperties(); } }
-        }
-        public bool DrawOutside
-        {
-            get => drawOutside;
-            set { if (drawOutside != value) { drawOutside = value; SetMaterialProperties(); } }
-        }
-        public bool EnableInstancing
-        {
-            get => enableInstancing;
-            set { if (enableInstancing != value) { enableInstancing = value; SetMaterialProperties(); } }
-        }
+        public Color GlowColor { get => glowColor; set => SetProperty(ref glowColor, value); }
+        public float GlowBrightness { get => glowBrightness; set => SetProperty(ref glowBrightness, value); }
+        public int OutlineWidth { get => outlineWidth; set => SetProperty(ref outlineWidth, value); }
+        public float AlphaThreshold { get => alphaThreshold; set => SetProperty(ref alphaThreshold, value); }
+        public bool DrawOutside { get => drawOutside; set => SetProperty(ref drawOutside, value); }
+        public bool EnableInstancing { get => enableInstancing; set => SetProperty(ref enableInstancing, value); }
 
         [Tooltip("Base color of the glow.")]
         [SerializeField] private Color glowColor = Color.white;
@@ -51,43 +28,27 @@ namespace SpriteGlow
         [Tooltip("Threshold to determine sprite borders."), Range(0f, 1f)]
         [SerializeField] private float alphaThreshold = .01f;
         [Tooltip("Whether the outline should only be drawn outside of the sprite borders. Make sure sprite texture has sufficient transparent space for the required outline width.")]
-        [SerializeField] private bool drawOutside = false;
+        [SerializeField] private bool drawOutside;
         [Tooltip("Whether to enable GPU instancing.")]
-        [SerializeField] private bool enableInstancing = false;
+        [SerializeField] private bool enableInstancing;
 
         private static readonly int isOutlineEnabledId = Shader.PropertyToID("_IsOutlineEnabled");
         private static readonly int outlineColorId = Shader.PropertyToID("_OutlineColor");
         private static readonly int outlineSizeId = Shader.PropertyToID("_OutlineSize");
         private static readonly int alphaThresholdId = Shader.PropertyToID("_AlphaThreshold");
 
-        private MaterialPropertyBlock materialProperties;
+        private MaterialPropertyBlock propertyBlock;
 
-        private void Awake ()
+        private void Awake () => Renderer = GetComponent<SpriteRenderer>();
+        private void OnEnable () => SetMaterialProperties();
+        private void OnDisable () => SetMaterialProperties();
+        private void OnValidate () => SetMaterialProperties();
+        private void OnDidApplyAnimationProperties () => SetMaterialProperties();
+
+        private void SetProperty<T> (ref T current, T value) where T : IEquatable<T>
         {
-            Renderer = GetComponent<SpriteRenderer>();
-        }
-
-        private void OnEnable ()
-        {
-            SetMaterialProperties();
-        }
-
-        private void OnDisable ()
-        {
-            SetMaterialProperties();
-        }
-
-        private void OnValidate ()
-        {
-            if (!isActiveAndEnabled) return;
-
-            // Update material properties when changing serialized fields with editor GUI.
-            SetMaterialProperties();
-        }
-
-        private void OnDidApplyAnimationProperties ()
-        {
-            // Update material properties when changing serialized fields with Unity animation.
+            if (current.Equals(value)) return;
+            current = value;
             SetMaterialProperties();
         }
 
@@ -97,15 +58,15 @@ namespace SpriteGlow
 
             Renderer.sharedMaterial = SpriteGlowMaterial.GetSharedFor(this);
 
-            if (materialProperties == null) // Initializing it at `Awake` or `OnEnable` causes nullref in editor in some cases.
-                materialProperties = new MaterialPropertyBlock();
+            if (propertyBlock is null)
+                propertyBlock = new MaterialPropertyBlock();
 
-            materialProperties.SetFloat(isOutlineEnabledId, isActiveAndEnabled ? 1 : 0);
-            materialProperties.SetColor(outlineColorId, GlowColor * GlowBrightness);
-            materialProperties.SetFloat(outlineSizeId, OutlineWidth);
-            materialProperties.SetFloat(alphaThresholdId, AlphaThreshold);
+            propertyBlock.SetFloat(isOutlineEnabledId, isActiveAndEnabled ? 1 : 0);
+            propertyBlock.SetColor(outlineColorId, GlowColor * GlowBrightness);
+            propertyBlock.SetFloat(outlineSizeId, OutlineWidth);
+            propertyBlock.SetFloat(alphaThresholdId, AlphaThreshold);
 
-            Renderer.SetPropertyBlock(materialProperties);
+            Renderer.SetPropertyBlock(propertyBlock);
         }
     }
 }
