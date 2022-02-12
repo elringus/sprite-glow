@@ -9,7 +9,7 @@ namespace SpriteShapeGlowEffect
     /// </summary>
     [AddComponentMenu("Effects/Sprite Glow")]
     [RequireComponent(typeof(SpriteShapeRenderer)), DisallowMultipleComponent, ExecuteInEditMode]
-    public class SpriteShapeGlow : MonoBehaviour
+    public class SpriteShapeGlowEffect : MonoBehaviour
     {
         
         public SpriteShapeRenderer Renderer { get; private set; }
