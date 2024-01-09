@@ -1,5 +1,5 @@
 ## Installation
-Use [UPM](https://docs.unity3d.com/Manual/upm-ui.html) to install the package via the following git URL: `https://github.com/Elringus/SpriteGlow.git#package` or download and import [SpriteGlow.unitypackage](https://github.com/Elringus/SpriteGlow/raw/master/SpriteGlow.unitypackage) manually.
+Use [UPM](https://docs.unity3d.com/Manual/upm-ui.html) to install the package via the following git URL: `https://github.com/elringus/sprite-glow.git#package` or download and import [SpriteGlow.unitypackage](https://github.com/elringus/sprite-glow/raw/master/SpriteGlow.unitypackage) manually.
 
 ![](https://i.gyazo.com/b54e9daa9a483d9bf7f74f0e94b2d38a.gif)
 
@@ -49,8 +49,8 @@ Make sure 'Threshold' value of the bloom image effect is set high enough. It's u
 Most likely the outline shader is not included to the build (it happens when none of the included assets reference SpriteGlow component directly). You can force-include the shader by assigning it to the "Always Included Shaders" in Edit -> Project Settings -> Graphics.
 
 ### It's still not working!
-Make sure you're using a compatible Unity version; supported versions per release are available on the [releases page](https://github.com/Elringus/SpriteGlow/releases).
+Make sure you're using a compatible Unity version; supported versions per release are available on the [releases page](https://github.com/elringus/sprite-glow/releases).
 
 Download (clone) this repository and examine the example scenes, comparing them with your setup. Chances are, you've misconfigured something.
 
-In case nothing of the above helps, check the active [issues](https://github.com/Elringus/SpriteGlow/issues) or open a new one. Don't forget to include the full [error log](https://docs.unity3d.com/Manual/LogFiles.html), detailed information about your system, Unity version, package version and steps required to reproduce the issue. 
+In case nothing of the above helps, check the active [issues](https://github.com/elringus/sprite-glow/issues) or open a new one. Don't forget to include the full [error log](https://docs.unity3d.com/Manual/LogFiles.html), detailed information about your system, Unity version, package version and steps required to reproduce the issue. 
