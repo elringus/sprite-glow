@@ -54,3 +54,10 @@ Make sure you're using a compatible Unity version; supported versions per releas
 Download (clone) this repository and examine the example scenes, comparing them with your setup. Chances are, you've misconfigured something.
 
 In case nothing of the above helps, check the active [issues](https://github.com/elringus/sprite-glow/issues) or open a new one. Don't forget to include the full [error log](https://docs.unity3d.com/Manual/LogFiles.html), detailed information about your system, Unity version, package version and steps required to reproduce the issue. 
+
+---
+
+<a href="https://naninovel.com">
+  <p align="center">Sprite Glow is used in <strong>Naninovel: Visual Novel, Dialogue & Cutscene Storytelling Engine</strong>. Check it out!</p>
+  <p align="center"><img alt="naninovel banner" src="https://raw.githubusercontent.com/elringus/cdn/main/naninovel-banner-wide.png"></p>
+</a>
